@@ -2,56 +2,77 @@ The content below is an example project proposal / requirements document. Replac
 
 (__TODO__: your project name)
 
-# Shoppy Shoperson 
+# One Piece Jeopardy! 
 
 ## Overview
 
-(__TODO__: a brief one or two paragraph, high-level description of your project)
+*One Piece Jeopardy!* is a jeopardy-style game based off of One Piece. Users will register onto the site to create an account, and then be able to access the game. The game itself is a inquisition of three topics:
+* Arcs
+* Characters
+* Abilities (Haki, Devil Fruit, etc.)
 
-Remembering what to buy at the grocery store is waaaaay too difficult. Also, shopping for groceries when you're hungry leads to regrettable purchases. Sooo... that's where Shoppy Shoperson comes in!
+A user would have to pick one of the three categories and answer three questions (randomly selected from stored .json files on backend). Then, a user answers each question to their best of ability (Three tries per question. If you miss it, that's tragic!). After the user completes the game, they have the option to save it to their profile, which they can access anytime to view past games.
 
-Shoppy Shoperson is a web app that will allow users to keep track of multiple grocery lists. Users can register and login. Once they're logged in, they can create or view their grocery list. For every list that they have, they can add items to the list or cross off items.
-
+By the nature of this game randomly selecting things, functionality will need to be implemented to randomly select three questions from each .json. I'm thinking to implement a cron job at [pythonanywhere](pythonanywhere.com) and run a Python script to use the GitHub API to grab my GitHub credentials and select three questions to use once a day at 12:00 AM UCT. 
 
 ## Data Model
 
-(__TODO__: a description of your application's data and their relationships to each other) 
+The application will store Users and Past Games 
 
-The application will store Users, Lists and Items
-
-* users can have multiple lists (via references)
-* each list can have multiple items (by embedding)
-
-(__TODO__: sample documents)
-
+* Users will have the ability to view their past games by a relation
+* Past games can be accessed by user via an `id` parameter.
 An Example User:
 
 ```javascript
 {
-  username: "shannonshopper",
-  hash: // a password hash,
-  lists: // an array of references to List documents
+  username: "NarutoIsTheWorstOfTheBigThree",
+  passwordHash: "BorutoIsMid!!!" // a password hash, example hash provided
+  pastGames: // an array of references to past games
 }
 ```
 
-An Example List with Embedded Items:
+An Example of a Past Game:
 
-```javascript
+```typescript
 {
   user: // a reference to a User object
-  name: "Breakfast foods",
-  items: [
-    { name: "pancakes", quantity: "9876", checked: false},
-    { name: "ramen", quantity: "2", checked: true},
-  ],
-  createdAt: // timestamp
+  timestamp: Date: // only store day, we don't care about exact time
+  score: 6 // each try you lose a point, you get it wrong, no points!
+  attempt: {
+    // example category, can be abilities, characters, or arcs
+    category: "GreenGreenWhatsYourProblemGreenWhatIsYourProblemMeSayAloneRampMeSayAloneRamp"
+    questions: [
+      {
+        question: "This game sucks",
+        responses: [ // stores user responses
+          "CS2"
+        ],
+        answer: "CS2",
+        points: 3
+      },
+      {
+        question: "This game sucks more",
+        responses: [ 
+          "Valorant"
+        ],
+        answer: "VALORANT", // case insensitive detection
+        points: 3
+      },
+        question: "This game is the best of all time",
+        responses: [ 
+          "COD MW2",
+          "Pokemon Legends Arceus",
+          "JoJo's Bizzare Adventure: Eyes of Heaven"
+        ],
+        answer: "Team Fortress 2",
+        points: 0
+    ]
+  }
 }
 ```
 
 
-## [Link to Commented First Draft Schema](db.mjs) 
-
-(__TODO__: create a first draft of your Schemas in db.mjs and link to it)
+## [Link to Commented First Draft Schema](backend/db.ts) 
 
 ## Wireframes
 
@@ -98,8 +119,8 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 * (4 points) Perform client side form validation using a JavaScript library
     * see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
     * if you put in a number that's greater than 5, an error message will appear in the dom
-* (5 points) vue.js
-    * used vue.js as the frontend framework; it's a challenging library to learn, so I've assigned it 5 points
+* (2 points) React
+    * I will use React for my frontend. I have experience, so I won't have to learn anything. Because of the overhead added, I'll assign it two points.
 
 10 points total out of 8 required points (___TODO__: addtional points will __not__ count for extra credit)
 
