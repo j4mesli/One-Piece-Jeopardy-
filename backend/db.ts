@@ -34,4 +34,8 @@ const gameSchema = new mongoose.Schema({
 const User = mongoose.model('Review', userSchema);
 const Game = mongoose.model('Game', gameSchema);
 
+mongoose.connect(process.env.DSN!)
+.then(() => console.log('MongoDB connected...'))
+.catch(err => console.log(err));
+
 export { User, Game };
