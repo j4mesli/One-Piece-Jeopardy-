@@ -7,6 +7,7 @@ import url from 'url';
 const app = express();
 
 // set up express static
+const __filename = url.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url));
 app.use(express.static(path.join(__dirname, 'public')));
 
