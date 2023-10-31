@@ -1,17 +1,33 @@
 import mongoose from 'mongoose';
 
+// User Schema
 const userSchema = new mongoose.Schema({
     username: String,
     passwordHash: String,
-    pastGames: Array,
+    pastGames: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Game'
+    }],
 });
 
+// Game Schema
 const gameSchema = new mongoose.Schema({
-    user: String,
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    },
     timestamp: Date,
     score: Number,
     attempt: {
-        questions: 
+        category: String,
+        questions: [
+            {
+                question: String,
+                responses: Array,
+                answer: String,
+                points: Number
+            }
+        ]
     }
 });
 

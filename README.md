@@ -111,16 +111,19 @@ Here's a [complex example from wikipedia](https://upload.wikimedia.org/wikipedia
 
 (__TODO__: the research topics that you're planning on working on along with their point values... and the total points of research topics listed)
 
-* (5 points) Integrate user authentication
-    * I'm going to be using passport for user authentication
-    * And account has been made for testing; I'll email you the password
-    * see <code>cs.nyu.edu/~jversoza/ait-final/register</code> for register page
-    * see <code>cs.nyu.edu/~jversoza/ait-final/login</code> for login page
-* (4 points) Perform client side form validation using a JavaScript library
-    * see <code>cs.nyu.edu/~jversoza/ait-final/my-form</code>
-    * if you put in a number that's greater than 5, an error message will appear in the dom
-* (2 points) React
-    * I will use React for my frontend. I have experience, so I won't have to learn anything. Because of the overhead added, I'll assign it two points.
+* (1 point) Integrate user authentication
+    * I'm going to be using JWT for user authentication
+    * see <code>link/goes/here</code> for register page
+    * see <code>link/goes/here</code> for login page
+* (1 point) Perform client side form validation using React Hook Form
+    * see <code>link/goes/here</code>
+    * if you try and submit an empty form, it will not let you.
+* (1 point) External Library: TypeScript
+    * I will use TypeScript.
+* (3 points) Unit Testing
+    * I will use Jest for my unit tests.
+* (4 points (1+2+1)) Vite + React + ESLint
+    * I will use Vite + React + ESLint for my frontend. I have experience, so I won't have to learn anything. Because of the overhead added, I'll assign it four (1 + 2 + 1) points.
 
 10 points total out of 8 required points (___TODO__: addtional points will __not__ count for extra credit)
 
