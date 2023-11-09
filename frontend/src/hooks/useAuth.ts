@@ -1,17 +1,14 @@
 import { useState, useEffect } from 'react';
 
 const useAuth = () => {
-  // const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean | null>(null);
 
-  // useEffect(() => {
-  //   /* PLACEHOLDER CODE */
-  //   const token = localStorage.getItem('yourTokenKey') || sessionStorage.getItem('yourTokenKey');
-  //   const isValidToken = token;
-  //   setIsAuthenticated(!!isValidToken);
-  // }, []);
+  useEffect(() => {
+    const sessionData = sessionStorage.getItem('session');
+    setIsAuthenticated(sessionData ? true : false);
+  }, []);
 
-  // return isAuthenticated;
-  return true
+  return isAuthenticated;
 };
 
 export default useAuth;

@@ -11,17 +11,22 @@ const fetchTestsHandler = async (req: Request, res: Response) => {
         const sessionId = headers.sessionId as string;
         const validated = await User.findOne({ sessionId: sessionId });
         if (validated) {
-            res.status(200).send(testQuestions);
+            res.status(200).send({
+                questions: testQuestions,
+                status: 200
+            });
         }
         else {
             res.status(400).send({
-                message: "Bad request, invalid sessionId"
+                message: "Bad request, invalid sessionId",
+                status: 400,
             });
         }
     }
     else {
         res.status(400).send({
-            message: "Bad request, please provide proper information"
+            message: "Bad request, please provide proper information",
+            status: 400,
         });
     }
 }
@@ -37,24 +42,28 @@ const fetchQuestionHandler = async (req: Request, res: Response) => {
             if (question) {
                 res.status(200).send({
                     message: "OK, Question successfully fetched",
-                    question
+                    question,
+                    status: 200,
                 });
             }
             else {
                 res.status(400).send({
-                    message: "Bad request, index out of bounds"
+                    message: "Bad request, index out of bounds",
+                    status: 400,
                 });
             }
         }
         else {
             res.status(400).send({
-                message: "Bad request, invalid sessionId"
+                message: "Bad request, invalid sessionId",
+                status: 400,
             });
         }
     }
     else {
         res.status(400).send({
-            message: "Bad request, please provide proper information"
+            message: "Bad request, please provide proper information",
+            status: 400,
         });
     }
 };

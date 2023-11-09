@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import cors from "cors";
 import path from 'path';
 import setup from "./setup";
 import userRoutes from "./routes/userRoutes";
@@ -15,6 +16,9 @@ app.use(express.urlencoded({ extended: false }));
 
 // log all requests sent to backend
 app.use(morgan('tiny'));
+
+// establish CORS policy
+app.use(cors());
 
 // setup and connect to db
 setup();
