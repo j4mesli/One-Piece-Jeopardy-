@@ -25,6 +25,7 @@ An Example User:
 {
   username: "Top1WorldBorutoHater",
   passwordHash: "BorutoIsMid!!!" // a password hash, example hash provided
+  salt: "pootisspencerhere" // what the password hash is salted with
   pastGames: // an array of references to past games
 }
 ```
