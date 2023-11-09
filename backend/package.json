@@ -11,6 +11,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "start": "nodemon app.ts"
+    "start": "nodemon app.ts",
+    "launch": "git remote get-url origin"
   }
 }
