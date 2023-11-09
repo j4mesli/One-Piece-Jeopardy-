@@ -1,8 +1,9 @@
 import express from 'express';
-import {  } from '../controllers/gameController';
+import { fetchTestsHandler, fetchQuestionHandler } from '../controllers/gameController';
 
 const router = express.Router();
 
-router.get('', );
+router.get('/fetchTestQuestions', fetchTestsHandler);
+router.get('/fetchQuestion', fetchQuestionHandler);
 
 export default router;

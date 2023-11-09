@@ -1,4 +1,5 @@
 import express from "express";
+import morgan from "morgan";
 import path from 'path';
 import setup from "./setup";
 import userRoutes from "./routes/userRoutes";
@@ -11,6 +12,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // body parser (req.body)
 app.use(express.urlencoded({ extended: false }));
+
+// log all requests sent to backend
+app.use(morgan('tiny'));
 
 // setup and connect to db
 setup();

@@ -4,7 +4,7 @@ The content below is an example project proposal / requirements document. Replac
 
 ## Overview
 
-*One Piece Jeopardy!* is a jeopardy-style game based off of One Piece. Users will register onto the site to create an account, and then be able to access the game. The game itself is a inquisition of three topics:
+*One Piece Jeopardy!* is a jeopardy-style game based off of One Piece. Users will register onto the site to create an account, and then be able to access the game. The game itself is an inquisition of three topics:
 * Arcs
 * Characters
 * Abilities (Haki, Devil Fruit, etc.)
@@ -37,7 +37,7 @@ An Example of a Past Game:
 {
   user: // a reference to a User object
   timestamp: Date: // only store day, we don't care about exact time
-  score: 5 // each try you lose a point, you get it wrong, no points!
+  score: 6 // each try you lose a point, you get it wrong, no points!
   attempt: {
     // example category, can be abilities, characters, or arcs
     category: "GreenGreenWhatsYourProblemGreenWhatIsYourProblemMeSayAloneRampMeSayAloneRamp"
@@ -63,10 +63,11 @@ An Example of a Past Game:
         responses: [ 
           "The Last of Us",
           "Pokemon: Legends Arceus",
-          "team fortress 2!"
+          "tea##$mfortress2!"
         ],
+        // TODO (maybe): implement custom Longest Common Subsequence O(M*N) dynamic programming algorithm for fuzzy search
         answer: "Team Fortress 2", // fuzzy search to answer, matches result
-        points: 0
+        points: 1
     ]
   }
 }

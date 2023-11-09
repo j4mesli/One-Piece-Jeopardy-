@@ -4,16 +4,22 @@ import User from "../models/GameUser";
 import getMDY from "../functions/getMDY";
 
 const logoutHandler = async (req: Request, res: Response) => {
-    const obj = req.query;
-    if (obj.username) {
+    const headers = req.headers;
+    if (headers.username && headers.sessionid) {
         try {
-            const user = await User.findOne({ username: obj.username as string });
+            const user = await User.findOne({ username: headers.username as string });
             if (user === null) { 
                 return res.status(400).send({ 
                     message : "User not found."
                 }); 
             } 
             else { 
+                console.log(user)
+                if (user.sessionId !== headers.sessionid) { 
+                    return res.status(400).send({ 
+                        message : "Session Invalid"
+                    }); 
+                }
                 await user.updateOne({ sessionId: null });
                 return res.status(201).send({ 
                     message : "Successfully Logged Out", 
@@ -36,23 +42,23 @@ const logoutHandler = async (req: Request, res: Response) => {
 };
 
 const loginHandler = async (req: Request, res: Response) => {
-    const obj = req.query;
-    if (obj.username && obj.password) {
+    const headers = req.headers;
+    if (headers.username && headers.password) {
         try {
-            const user = await User.findOne({ username: obj.username as string });
+            const user = await User.findOne({ username: headers.username as string });
             if (user === null) { 
                 return res.status(400).send({ 
                     message : "User not found."
                 }); 
             } 
             else { 
-                if (user.validatePassword(obj.password as string)) { 
+                if (user.validatePassword(headers.password as string)) { 
                     const id = crypto.randomBytes(16).toString('base64');
                     await user.updateOne({ sessionId: id });
                     return res.status(201).send({ 
                         message : "User Logged In", 
                         session: {
-                            id: id,
+                            sessionId: id,
                             username: user.username,
                             timestamp: getMDY(),
                         }
@@ -79,20 +85,25 @@ const loginHandler = async (req: Request, res: Response) => {
 };
 
 const registerHandler = async (req: Request, res: Response) => {
-    const obj = req.query;
-    if (obj.username && obj.password) {
-        obj.username = (obj.username as string).toLowerCase();
-        obj.password = obj.password as string;
+    const headers = req.headers;
+    if (headers.username && headers.password) {
+        headers.username = (headers.username as string).toLowerCase();
+        headers.password = headers.password as string;
 
         const newUser = new User({
-            username: obj.username
+            username: headers.username,
+            sessionId: crypto.randomBytes(16).toString('base64'),
         });
-        newUser.setPassword(obj.password);
+        newUser.setPassword(headers.password);
 
         try {
             const savedUser = await newUser.save();
             res.status(200).send({
-                user: savedUser,
+                user: {
+                    username: savedUser.username,
+                    sessionId: savedUser.sessionId,
+                    timestamp: getMDY(),
+                },
                 message: "User created",
             });
         } catch (err) {
@@ -111,23 +122,23 @@ const registerHandler = async (req: Request, res: Response) => {
 };
 
 const verifySessionHandler = async (req: Request, res: Response) => {
-    const obj = req.query;
-    if (obj.id && obj.username) {
-        obj.username = (obj.username as string).toLowerCase();
-        obj.id = obj.id as string;
+    const headers = req.headers;
+    if (headers.id && headers.username) {
+        headers.username = (headers.username as string).toLowerCase();
+        headers.id = headers.id as string;
         try {
-            const user = await User.findOne({ username: obj.username as string });
+            const user = await User.findOne({ username: headers.username as string });
             if (user === null) { 
                 return res.status(400).send({ 
                     message : "User not found."
                 }); 
             } 
             else { 
-                if (user.sessionId === obj.id) { 
+                if (user.sessionId === headers.id) { 
                     return res.status(201).send({ 
                         message : "Session Valid", 
                         session: {
-                            id: obj.id,
+                            id: headers.id,
                             username: user.username,
                             timestamp: getMDY(),
                         }

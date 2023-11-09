@@ -1,5 +1,3 @@
-// App.js
-
 import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Header from './views/Header/Header';
