@@ -27,6 +27,7 @@ An Example User:
   passwordHash: "BorutoIsMid!!!" // a password hash, example hash provided
   salt: "pootisspencerhere" // what the password hash is salted with
   pastGames: // an array of references to past games
+  sessionId: // a string or null (null added on successful logout, string added as a randomly generated string on successful login)
 }
 ```
 
