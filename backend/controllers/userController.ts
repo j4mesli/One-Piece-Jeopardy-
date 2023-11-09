@@ -1,7 +1,7 @@
-import e, { Request, Response } from "express";
+import { Request, Response } from "express";
 import crypto from "crypto";
 import User from "../models/GameUser";
-import getMDY from "../methods/getMDY";
+import getMDY from "../functions/getMDY";
 
 const logoutHandler = async (req: Request, res: Response) => {
     const obj = req.query;

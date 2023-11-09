@@ -11,7 +11,7 @@ The content below is an example project proposal / requirements document. Replac
 
 A user would have to pick one of the three categories and answer three questions (randomly selected from stored .json files on backend). Then, a user answers each question to their best of ability (Three tries per question. If you miss it, that's tragic!). After the user completes the game, they have the option to save it to their profile, which they can access anytime to view past games.
 
-By the nature of this game randomly selecting things, functionality will need to be implemented to randomly select three questions from each .json. I'm thinking to implement a cron job at [pythonanywhere](pythonanywhere.com) and run a Python script to use the GitHub API to grab my GitHub credentials and select three questions to use once a day at 12:00 AM UCT. 
+By the nature of this game randomly selecting things, functionality will need to be implemented to randomly select three questions from each .json. I'm thinking to implement a cron job at [pythonanywhere](https://www.pythonanywhere.com) and run a Python script to use the GitHub API to grab my GitHub credentials and select three questions to use once a day at 12:00 AM UCT. 
 
 ## Data Model
 
@@ -25,7 +25,7 @@ An Example User:
 {
   username: "Top1WorldBorutoHater",
   passwordHash: "BorutoIsMid!!!" // a password hash, example hash provided
-  salt: "pootisspencerhere" // what the password hash is salted with
+  salt: "pootisspencerhere" // what the password hash is salted with, randomly generated per user
   pastGames: // an array of references to past games
   sessionId: // a string or null (null added on successful logout, string added as a randomly generated string on successful login)
 }
@@ -63,9 +63,9 @@ An Example of a Past Game:
         responses: [ 
           "The Last of Us",
           "Pokemon: Legends Arceus",
-          "JoJo's Bizzare Adventure: Eyes of Heaven"
+          "team fortress 2!"
         ],
-        answer: "Team Fortress 2",
+        answer: "Team Fortress 2", // fuzzy search to answer, matches result
         points: 0
     ]
   }
