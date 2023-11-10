@@ -6,7 +6,7 @@ function Game() {
   const [score, setScore] = useState(0);
 
   const deleteTests = async () => {
-    const res = await fetch("https://-jeopardy-backend-d2ca7583addf.herokuapp.com/deleteTest", {
+    const res = await fetch("https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/deleteTest", {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -39,7 +39,7 @@ function Game() {
     headers.append("Content-Type", "application/json");
     headers.append("sessionId", sessionId);
     headers.append("answers", JSON.stringify(answers));
-    const res = await fetch("https://-jeopardy-backend-d2ca7583addf.herokuapp.com/evaluateTest", {
+    const res = await fetch("https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/evaluateTest", {
       method: "POST",
       headers: headers
     });
@@ -67,7 +67,7 @@ function Game() {
     headers.append("Content-Type", "application/json");
     headers.append("sessionId", JSON.parse(sessionStorage.getItem("session")!).sessionId);
     const fetchData = async () => {
-      const res = await fetch("https://-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchTestQuestions", {
+      const res = await fetch("https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchTestQuestions", {
         method: "GET",
         headers: headers
       });
@@ -85,7 +85,7 @@ function Game() {
     <div className="game">
       <h1>Game</h1>
       { showGame ? (
-        <form className="game-form" action="https://-jeopardy-backend-d2ca7583addf.herokuapp.com" onSubmit={handleSubmit}>
+        <form className="game-form" action="https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com" onSubmit={handleSubmit}>
         <ul>
           { questions.map((question, index) => {
             return (
