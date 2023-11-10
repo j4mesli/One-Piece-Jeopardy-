@@ -7,7 +7,7 @@ function Game() {
 
   const deleteTests = async () => {
     const res = await fetch("https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/deleteTest", {
-      method: "GET",
+      method: "DELETE",
       headers: {
         "Content-Type": "application/json",
         "sessionId": JSON.parse(sessionStorage.getItem("session")!).sessionId,
@@ -40,7 +40,7 @@ function Game() {
     headers.append("sessionId", sessionId);
     headers.append("answers", JSON.stringify(answers));
     const res = await fetch("https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/evaluateTest", {
-      method: "GET",
+      method: "POST",
       headers: headers
     });
     const data = await res.json();

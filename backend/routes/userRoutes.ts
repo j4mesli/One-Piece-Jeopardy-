@@ -3,9 +3,9 @@ import { loginHandler, logoutHandler, registerHandler, verifySessionHandler } fr
 
 const router = express.Router();
 
-router.get('/logout', logoutHandler);
-router.get('/login', loginHandler);
-router.get('/register', registerHandler);
+router.post('/logout', logoutHandler);
+router.post('/login', loginHandler);
+router.post('/register', registerHandler);
 router.get('/verifySession', verifySessionHandler);
 
 export default router;

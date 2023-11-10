@@ -16,7 +16,7 @@ function Login() {
 
     try {
       const response = await fetch('https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/login', {
-        method: 'GET',
+        method: 'POST',
         headers: headers,
       });
       const result: LoginResponse = await response.json();
