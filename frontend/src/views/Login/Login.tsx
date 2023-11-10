@@ -15,7 +15,7 @@ function Login() {
     headers.append('password', password);
 
     try {
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch('one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/login', {
         method: 'POST',
         headers: headers,
       });
@@ -39,7 +39,7 @@ function Login() {
 
   return (
     <div className="login">
-        <form action="http://localhost:3000/login" method="POST" className="loginForm" onSubmit={ handleSubmit }>
+        <form action="one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/login" method="POST" className="loginForm" onSubmit={ handleSubmit }>
             <h1>Login</h1>
             <div className="loginFormInput">
                 <label htmlFor="username">Username</label>

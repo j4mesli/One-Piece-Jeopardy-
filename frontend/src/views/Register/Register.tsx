@@ -39,7 +39,7 @@ function Register() {
 
   return (
     <div className="register">
-        <form action="http://localhost:3000/register" method="POST" className="registerForm" onSubmit={ handleSubmit }>
+        <form action="one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/register" method="POST" className="registerForm" onSubmit={ handleSubmit }>
             <h1>Register</h1>
             <div className="registerFormInput">
                 <label htmlFor="username">Username</label>
