@@ -14,7 +14,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "start": "ts-node-dev --respawn --pretty --transpile-only src/app.ts",
+    "start": "ts-node-dev --respawn --pretty --transpile-only app.ts",
     "launch": "git remote get-url origin"
   },
   "devDependencies": {
