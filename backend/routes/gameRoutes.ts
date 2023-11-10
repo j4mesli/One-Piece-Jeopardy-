@@ -4,9 +4,9 @@ import { fetchTestsHandler, evaluateTestHandler, deleteTestHandler, fetchQuestio
 const router = express.Router();
 
 router.get('/fetchTestQuestions', fetchTestsHandler);
-router.post('/evaluateTest', evaluateTestHandler);
-router.delete('/deleteTest', deleteTestHandler);
+router.get('/evaluateTest', evaluateTestHandler);
+router.get('/deleteTest', deleteTestHandler);
 router.get('/fetchQuestion', fetchQuestionHandler);
-router.post('/evaluateQuestion', evaluateQuestionHandler);
+router.get('/evaluateQuestion', evaluateQuestionHandler);
 
 export default router;
