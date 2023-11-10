@@ -26,15 +26,7 @@ app.use(cors());
 setup();
 
 // route handling
-app.post('/logout', logoutHandler);
-app.post('/login', loginHandler);
-app.post('/register', registerHandler);
-app.get('/verifySession', verifySessionHandler);
-
-app.get('/fetchTestQuestions', fetchTestsHandler);
-app.post('/evaluateTest', evaluateTestHandler);
-app.delete('/deleteTest', deleteTestHandler);
-app.get('/fetchQuestion', fetchQuestionHandler);
-app.post('/evaluateQuestion', evaluateQuestionHandler);
+app.use('/user', userRoutes);
+app.use('/game', gameRoutes);
 
 app.listen(process.env.PORT || 3000, () => { console.log("backend listening on port 3000 at http://localhost:3000") });
