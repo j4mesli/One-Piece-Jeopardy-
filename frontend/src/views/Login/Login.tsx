@@ -39,7 +39,7 @@ function Login() {
 
   return (
     <div className="login">
-        <form action="one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/login" method="POST" className="loginForm" onSubmit={ handleSubmit }>
+        <form action="one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/login" method="GET" className="loginForm" onSubmit={ handleSubmit }>
             <h1>Login</h1>
             <div className="loginFormInput">
                 <label htmlFor="username">Username</label>
