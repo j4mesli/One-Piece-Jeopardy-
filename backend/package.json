@@ -13,7 +13,7 @@
     "typescript": "^5.2.2"
   },
   "scripts": {
-    "start": "nodemon app.ts",
+    "start": "ts-node-dev --respawn --pretty --transpile-only src/app.ts",
     "launch": "git remote get-url origin"
   },
   "devDependencies": {
