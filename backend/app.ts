@@ -3,8 +3,6 @@ import morgan from "morgan";
 import cors from "cors";
 import path from 'path';
 import setup from "./setup";
-import userRoutes from "./routes/userRoutes";
-import gameRoutes from "./routes/gameRoutes";
 import { loginHandler, logoutHandler, registerHandler, verifySessionHandler } from './controllers/userController';
 import { fetchTestsHandler, evaluateTestHandler, deleteTestHandler, fetchQuestionHandler, evaluateQuestionHandler } from './controllers/gameController';
 
