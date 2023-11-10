@@ -15,7 +15,6 @@ const logoutHandler = async (req: Request, res: Response) => {
                 }); 
             } 
             else { 
-                console.log(user)
                 if (user.sessionId !== headers.sessionid) { 
                     return res.status(400).send({ 
                         message : "Session Invalid",
@@ -102,6 +101,14 @@ const registerHandler = async (req: Request, res: Response) => {
         headers.username = (headers.username as string).toLowerCase();
         headers.password = headers.password as string;
 
+        const user = await User.findOne({ username: headers.username });
+        if (user !== null) {
+            return res.status(400).send({
+                message: "User already exists",
+                status: 400,
+            });
+        }
+
         const newUser = new User({
             username: headers.username,
             sessionId: crypto.randomBytes(16).toString('base64'),
@@ -138,7 +145,6 @@ const registerHandler = async (req: Request, res: Response) => {
 
 const verifySessionHandler = async (req: Request, res: Response) => {
     const headers = req.headers;
-    console.log(headers, headers.sessionid, headers.username)
     if (headers.sessionid && headers.username) {
         headers.username = (headers.username as string).toLowerCase();
         headers.sessionid = headers.sessionid as string;

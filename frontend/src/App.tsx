@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import './App.css';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Header from './views/Header/Header';
@@ -10,10 +10,31 @@ import LoggedInRoute from './components/LoggedInRoute';
 import LoggedOutRoute from './components/LoggedOutRoute';
 import UserSession from './types/UserSession';
 
+// make our project aware of the custom property we add to Window
+declare global {
+  interface Window {
+    updateSessionState?: () => void;
+  }
+}
+
 function App() {
+  const [hasSession, setHasSession] = useState<boolean>(sessionStorage.getItem('session') !== null);
+
+  const updateSessionState = useCallback(() => {
+    setHasSession(sessionStorage.getItem('session') !== null);
+  }, []);
+
   useEffect(() => {
-    const session: UserSession = JSON.parse(sessionStorage.getItem('session')!);
     const verifySession = async () => {
+      const sessionData = sessionStorage.getItem('session');
+      if (!sessionData) {
+        console.log('No session data available.');
+        setHasSession(false);
+        return;
+      }
+
+      const session: UserSession = JSON.parse(sessionData);
+      
       try {
         const response = await fetch('http://localhost:3000/verifySession', {
           method: 'GET',
@@ -28,24 +49,44 @@ function App() {
         if (data.status !== 201) {
           sessionStorage.removeItem('session');
           console.log("Improper session, logging out");
-          // can't use useNavigate() here because we're not in a route
+          setHasSession(false);
           window.location.href = '/login';
         }
         else {
           console.log("Session verified!");
+          setHasSession(true);
         }
-      } catch (error) {
-        console.log('not logged in');
+      }
+      catch (error) {
+        console.log('Error verifying session');
+        sessionStorage.removeItem('session');
+        setHasSession(false);
+        window.location.href = '/login';
+      }
+      window.updateSessionState = updateSessionState;
+      return () => {
+        window.updateSessionState = undefined;
       }
     };
 
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'session') {
+        setHasSession(!!e.newValue);
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
     verifySession();
-  });
+
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, [updateSessionState]);
 
   return (
     <div className="App">
       <BrowserRouter>
-        <Header />
+        {hasSession && <Header />}
         <Routes>
           <Route element={<LoggedOutRoute />}>
             <Route path="/login" element={<Login />} />

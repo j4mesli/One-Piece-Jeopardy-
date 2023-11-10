@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 // Game Schema
 const gameSchema = new mongoose.Schema({
     user: {
-        type: mongoose.Schema.Types.ObjectId,
+        type: mongoose.Types.ObjectId,
         ref: 'User'
     },
     timestamp: Date,

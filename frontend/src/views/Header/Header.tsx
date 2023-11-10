@@ -19,9 +19,12 @@ function Header() {
         headers: headers,
       });
       const result: LogoutResponse = await response.json();
-      console.log(result);
       if (result.status === 201) {
         sessionStorage.removeItem('session');
+        // throw flag to update session state of user information
+        if (window.updateSessionState) {
+          window.updateSessionState();
+        }
         navigate('/');
       }
       else {

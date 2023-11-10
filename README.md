@@ -105,10 +105,10 @@ An Example of a Past Game:
 
 * (1 point) Integrate user authentication
     * I'm going to be using JWT for user authentication
-    * see <code>link/goes/here</code> for register page
-    * see <code>link/goes/here</code> for login page
+    * see <code>[here](frontend/src/views/Register/Register.tsx)</code> for register page
+    * see <code>[here](frontend/src/views/Login/Login.tsx)</code> for login page
 * (1 point) Perform client side form validation w/ custom code
-    * see <code>link/goes/here</code>
+    * see <code>[here](frontend/src/views/Register/Register.tsx)</code> and <code>[here](frontend/src/views/Login/Login.tsx)</code>
     * if you try and submit an empty form, it will not let you.
 * (1 point) External Library: TypeScript
     * I will use TypeScript.

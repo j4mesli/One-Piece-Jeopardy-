@@ -22,6 +22,10 @@ function Login() {
       const result: LoginResponse = await response.json();
       if (result.status === 201) {
         sessionStorage.setItem('session', JSON.stringify(result.session));
+        // throw flag to update session state of user information
+        if (window.updateSessionState) {
+          window.updateSessionState();
+        }
         navigate('/game');
       }
       else {
