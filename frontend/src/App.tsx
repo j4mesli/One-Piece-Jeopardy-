@@ -13,7 +13,7 @@ import UserSession from './types/UserSession';
 // make our project aware of the custom property we add to Window
 declare global {
   interface Window {
-    updateSessionState?: () => void;
+    updateSessionState: () => void;
   }
 }
 
@@ -23,6 +23,10 @@ function App() {
   const updateSessionState = useCallback(() => {
     setHasSession(sessionStorage.getItem('session') !== null);
   }, []);
+
+  useEffect(() => {
+    window.updateSessionState = updateSessionState;
+  }, [updateSessionState]);
 
   useEffect(() => {
     const verifySession = async () => {
@@ -64,9 +68,6 @@ function App() {
         window.location.href = '/login';
       }
       window.updateSessionState = updateSessionState;
-      return () => {
-        window.updateSessionState = undefined;
-      }
     };
 
     const handleStorageChange = (e: StorageEvent) => {
@@ -81,7 +82,7 @@ function App() {
     return () => {
       window.removeEventListener('storage', handleStorageChange);
     };
-  }, [updateSessionState]);
+  }, [hasSession, updateSessionState]);
 
   return (
     <div className="App">
