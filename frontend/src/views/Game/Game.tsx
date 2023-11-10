@@ -45,7 +45,6 @@ function Game() {
     });
     const data = await res.json();
     if (data.status === 200) {
-      console.log("Success");
       setShowGame(false);
     }
     console.log(data);
@@ -60,7 +59,7 @@ function Game() {
   const [questions, setQuestions] = useState<[{question: string}]>([] as unknown as [{question: string}]);
   useEffect(() => {
     const sessionScore = JSON.parse(sessionStorage.getItem("session")!).score;
-    if (sessionScore !== null) {
+    if (sessionScore) {
       setShowGame(false);
       setScore(sessionScore);
     }
