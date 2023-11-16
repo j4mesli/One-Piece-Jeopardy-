@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import useAuth from '../hooks/useAuth';
+import useAuth from '../../hooks/useAuth';
 
-const LoggedOutRoute = () => {
+const LoggedInRoute = () => {
   const isAuthenticated = useAuth();
 
   if (isAuthenticated === null) {
@@ -10,7 +10,7 @@ const LoggedOutRoute = () => {
     return null;
   }
 
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/profile" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 
-export default LoggedOutRoute;
+export default LoggedInRoute;

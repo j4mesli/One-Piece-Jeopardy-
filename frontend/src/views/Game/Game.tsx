@@ -1,109 +1,94 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from "react";
 import "./Game.css";
+import CategorySelection from "../../components/Game/CategorySelection";
+import UserSession from "../../types/UserSession";
+import { responseArr } from "../../types/responseArr";
+import GameQuestion from "../../components/Game/GameQuestion";
 
 function Game() {
-  const [showGame, setShowGame] = useState(true);
-  const [score, setScore] = useState(0);
+  const [inGame, setInGame] = useState(false);
+  const [showQuestion, setShowQuestion] = useState(false);
+  const [category, setCategory] = useState("");
+  const [responseArray] = useState([] as responseArr);
+  const [currQuestion, setCurrQuestion] = useState("");
+  const [index, setIndex] = useState(0);
+  const userSessionObject: UserSession = JSON.parse(sessionStorage.getItem('session')!);
 
-  const deleteTests = async () => {
-    const res = await fetch("https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/deleteTest", {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-        "sessionId": JSON.parse(sessionStorage.getItem("session")!).sessionId,
-        "username": JSON.parse(sessionStorage.getItem("session")!).username,
-      }
-    });
-    const data = await res.json();
-    if (data.status === 200) {
-      console.log("Success");
-      setScore(0);
-      setShowGame(true);
-      const sesh = JSON.parse(sessionStorage.getItem("session")!);
-      delete sesh["score"];
-      sessionStorage.setItem("session", JSON.stringify(sesh));
-    }
-    else {
-      console.log("Error deleting test" + data.message);
-    }
-  };
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const answers: string[] = [];
-    const sessionId = JSON.parse(sessionStorage.getItem("session")!).sessionId;
-    for (let i = 0; i < questions.length; i++) {
-      answers.push(event.currentTarget[""+i].value);
-    }
-    const headers = new Headers();
-    headers.append("Content-Type", "application/json");
-    headers.append("sessionId", sessionId);
-    headers.append("answers", JSON.stringify(answers));
-    const res = await fetch("https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/evaluateTest", {
-      method: "POST",
-      headers: headers
-    });
-    const data = await res.json();
-    if (data.status === 200) {
-      setShowGame(false);
-    }
-    console.log(data);
-    setScore(data.score);
-    const sesh = JSON.parse(sessionStorage.getItem("session")!);
-    sesh["score"] = data["score"];
-    console.log(sesh)
-    sessionStorage.setItem("session", JSON.stringify(sesh));
-  };
-
-  // PLACEHOLDER GAME, CHANGE FOR REAL LOGIC LATER
-  const [questions, setQuestions] = useState<[{question: string}]>([] as unknown as [{question: string}]);
+  // useEffect for fetching first question after select
   useEffect(() => {
-    const sessionScore = JSON.parse(sessionStorage.getItem("session")!).score;
-    if (sessionScore) {
-      setShowGame(false);
-      setScore(sessionScore);
+    if (category !== "") {
+      fetchQuestion(0);
+      setInGame(true);
     }
+  }, [category]);
+
+  // useEffect for setting question elem
+  useEffect(() => {
+    if (currQuestion !== "") {
+      setShowQuestion(true);
+    }
+  }, [currQuestion]);
+
+  // useEffect for incrementing index (getting next question)
+  useEffect(() => {
+    setShowQuestion(false);
+    if (index < 3 && index > 0) {
+      fetchQuestion(index);
+    }
+    else if (index === 3){
+      console.log(responseArray);
+      submitAnswer();
+    }
+  }, [index]);
+
+  const handleSelection = (category: string) => () => {
+    setCategory(category);
+  };
+
+  const fetchQuestion = async (index: number) => {
+    const endpoint = `http://localhost:3000/fetchQuestion`;
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
-    headers.append("sessionId", JSON.parse(sessionStorage.getItem("session")!).sessionId);
-    const fetchData = async () => {
-      const res = await fetch("https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchTestQuestions", {
-        method: "GET",
-        headers: headers
-      });
-      const data = await res.json();
-      if (data.status === 200) {
-        setQuestions(data.questions);
-      }
-      else {
-        console.log("Error getting questions");
-      }
-    };
-    fetchData();
-  }, []);
+    headers.append("category", category);
+    headers.append("index", index.toString());
+    headers.append("username", userSessionObject.username);
+    headers.append("sessionId", userSessionObject.sessionId);
+    const res = await fetch(endpoint, {
+      method: "GET",
+      headers: headers,
+    });
+    const data = await res.json();
+    setCurrQuestion(data.question);
+  }
+
+  const handleAnswer = (answer: string) => () => {
+    responseArray.push({ index, answer: answer });
+    setIndex(index + 1);
+  }
+
+  const submitAnswer = async () => {
+    const endpoint = `http://localhost:3000/evaluateQuestions`;
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("category", category);
+    headers.append("index", index.toString());
+    headers.append("username", userSessionObject.username);
+    headers.append("sessionId", userSessionObject.sessionId);
+    headers.append("responses", JSON.stringify(responseArray));
+    const res = await fetch(endpoint, {
+      method: "POST",
+      headers: headers,
+    });
+    const data = await res.json();
+    console.log(data);
+  };
+
   return (
     <div className="game">
-      <h1>Game</h1>
-      { showGame ? (
-        <form className="game-form" action="https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com" onSubmit={handleSubmit}>
-        <ul>
-          { questions.map((question, index) => {
-            return (
-              <li key={ index }>
-                {question.question}
-                <input type="text" name={""+index} required></input>
-              </li>
-            );
-          }) }
-          <input type="submit" value="Submit"></input>
-        </ul>
-      </form>
-      ) : (
-        <div>
-          <p>Score: {score}</p>
-          <p>Click <a onClick={deleteTests}>here</a> to delete your game!</p>
-        </div>
-      )}
+      <h1><i>One Piece</i> Jeopardy!</h1>
+      {!inGame && <CategorySelection makeSelection={handleSelection} />}
+      {showQuestion && <GameQuestion makeAnswer={handleAnswer} index={index} question={currQuestion} />}
     </div>
   );
 }

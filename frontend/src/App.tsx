@@ -6,8 +6,8 @@ import Login from './views/Login/Login';
 import Register from './views/Register/Register';
 import Game from './views/Game/Game';
 import Profile from './views/Profile/Profile';
-import LoggedInRoute from './components/LoggedInRoute';
-import LoggedOutRoute from './components/LoggedOutRoute';
+import LoggedInRoute from './components/Auth/LoggedInRoute';
+import LoggedOutRoute from './components/Auth/LoggedOutRoute';
 import UserSession from './types/UserSession';
 
 // make our project aware of the custom property we add to Window
@@ -40,7 +40,7 @@ function App() {
       const session: UserSession = JSON.parse(sessionData);
       
       try {
-        const response = await fetch('https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/verifySession', {
+        const response = await fetch('http://localhost:3000/verifySession', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ function App() {
   }, [hasSession, updateSessionState]);
 
   return (
-    <div className="App">
+    <div className="App container">
       <BrowserRouter>
         {hasSession && <Header />}
         <Routes>

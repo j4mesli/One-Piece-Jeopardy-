@@ -1,0 +1,13 @@
+.heading {
+    color: #222;
+}
+
+.subcategory {
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.subcategory:hover {
+    background-color: #eee;
+    transform: translateY(-2px);
+}
