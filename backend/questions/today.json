@@ -1,0 +1,50 @@
+{
+    "arcs": {
+        "questions": [
+            {
+                "question": "This arc features the Straw Hat Pirates' separation and subsequent two-year hiatus, as well as the introduction of the Eleven Supernovas. What is...?",
+                "answer": "Sabaody Archipelago"
+            },
+            {
+                "question": "Set in the sky atop giant clouds, this arc features a battle against the 'God' of Skypiea, Enel, and the discovery of an ancient bell. What is...?",
+                "answer": "Skypiea"
+            },
+            {
+                "question": "This arc is where Luffy first demonstrates Gear Second and Gear Third while battling against CP9. What is...?",
+                "answer": "Enies Lobby"
+            }
+        ]
+    },
+    "characters": {
+        "questions": [
+            {
+                "question": "This lesser-known member of the Revolutionary Army is recognized for his ability to create powerful winds and for being the second-in-command to Monkey D. Dragon. Who is...?",
+                "answer": "Sabo"
+            },
+            {
+                "question": "This character, often seen with a pinwheel hat, is the adoptive older brother of a Straw Hat crew member and was once a member of the Sun Pirates. Who is...?",
+                "answer": "Nojiko"
+            },
+            {
+                "question": "This character, originally from Drum Island, is noted for his blue-nose and ability to shapeshift. Who is...?",
+                "answer": "Tony Tony Chopper"
+            }
+        ]
+    },
+    "abilities": {
+        "questions": [
+            {
+                "question": "Rarely seen and highly respected, this form of Haki allows its user to exert their willpower over others, knocking out those with weaker wills. What is...?",
+                "answer": "Conqueror's Haki (Haoshoku Haki)"
+            },
+            {
+                "question": "This devil fruit allows its user to create tremors capable of causing massive destruction, and was notably used by one of the Yonko. What is...?",
+                "answer": "Gura Gura no Mi"
+            },
+            {
+                "question": "This Devil Fruit ability grants the power to transform into a hybrid and full giraffe form. What is...?",
+                "answer": "Ushi Ushi no Mi, Model: Giraffe"
+            }
+        ]
+    }
+}

@@ -1,9 +1,14 @@
 import { Request, Response } from "express";
 import testQuestions from "../questions/testQuestions.json";
+import today from "../questions/today.json";
 import User from "../models/GameUser";
 import { GameUser } from "../types/GameUser";
 import Game from "../models/GameInstance";
 import getMDY from "../functions/getMDY";
+import { QuestionsToday } from "../types/QuestionsToday";
+import * as fuzzy from "fast-fuzzy";
+
+const _today = today as QuestionsToday;
 
 const fetchTestsHandler = async (req: Request, res: Response) => {
     const headers = req.headers;
@@ -127,67 +132,31 @@ const deleteTestHandler = async (req: Request, res: Response) => {
 
 const fetchQuestionHandler = async (req: Request, res: Response) => {
     const headers = req.headers;
-    if (headers.index && headers.sessionId) {
+    if (headers.category && headers.index && headers.sessionid) {
         const index = +headers.index;
-        const sessionId = headers.sessionId as string;
+        const sessionId = headers.sessionid as string;
+        const category = headers.category as string;
         const validated = await User.findOne({ sessionId: sessionId });
         if (validated) {
-            const question = testQuestions[index];
-            if (question) {
-                res.status(200).send({
-                    message: "OK, Question successfully fetched",
-                    question,
-                    status: 200,
-                });
-            }
-            else {
-                res.status(400).send({
-                    message: "Bad request, index out of bounds",
-                    status: 400,
-                });
-            }
-        }
-        else {
-            res.status(400).send({
-                message: "Bad request, invalid sessionId",
-                status: 400,
-            });
-        }
-    }
-    else {
-        res.status(400).send({
-            message: "Bad request, please provide proper information",
-            status: 400,
-        });
-    }
-};
-
-const evaluateQuestionHandler = async (req: Request, res: Response) => {
-    const headers = req.headers;
-    if (headers.index && headers.sessionId && headers.answer) {
-        const index = +headers.index;
-        const sessionId = headers.sessionId as string;
-        const answer = headers.answer as string;
-        const validated = await User.findOne({ sessionId: sessionId });
-        if (validated) {
-            const question = testQuestions[index];
-            if (question) {
-                if (question.answer === answer) {
+            if (category === "characters" || category === "abilities" || category === "arcs") {
+                const question = _today[category].questions[index];
+                if (question) {
                     res.status(200).send({
-                        message: "Correct answer",
+                        message: "OK, Question successfully fetched",
+                        question: question.question,
                         status: 200,
                     });
                 }
                 else {
-                    res.status(202).send({
-                        message: "wrong answer",
-                        status: 202,
+                    res.status(400).send({
+                        message: "Bad request, index out of bounds",
+                        status: 400,
                     });
                 }
             }
             else {
                 res.status(400).send({
-                    message: "Bad request, index out of bounds",
+                    message: "Bad request, invalid category",
                     status: 400,
                 });
             }
@@ -207,4 +176,95 @@ const evaluateQuestionHandler = async (req: Request, res: Response) => {
     }
 };
 
-export { fetchTestsHandler, evaluateTestHandler, deleteTestHandler, fetchQuestionHandler, evaluateQuestionHandler };
+const evaluateQuestionsHandler = async (req: Request, res: Response) => {
+    const headers = req.headers;
+    if (headers.category && headers.sessionid && headers.responses) {
+        const sessionId = headers.sessionid as string;
+        const category = headers.category as string;
+        const responsesRaw = headers.responses as string;
+        const responses = JSON.parse(responsesRaw);
+        const validated = await User.findOne({ sessionId: sessionId });
+        if (validated) {
+            let score = 0;
+            const finalMarks = [] as Array<{
+                question: String,
+                response: String,
+                answer: String,
+                points: Number
+            }>;
+            responses.forEach((response: {index: number, answer: string}) => {
+                const index = response.index;
+                const answer = response.answer;
+                if (category === "characters" || category === "abilities" || category === "arcs") {
+                    const question = _today[category].questions[index];
+                    if (question) {
+                        // fuzzy match for "close enough" answers
+                        const similarity = fuzzy.fuzzy(answer, question.answer);
+                        console.log(similarity);
+                        if (similarity > 0.9) {
+                            finalMarks.push({
+                                question: question.question, 
+                                response: answer, 
+                                answer: question.answer, 
+                                points: category === "characters" ? 2 : (category === "abilities" ? 3 : 1)
+                            });
+                            score += category === "characters" ? 2 : (category === "abilities" ? 3 : 1);
+                        }
+                        else {
+                            finalMarks.push({
+                                question: question.question, 
+                                response: answer, 
+                                answer: question.answer, 
+                                points: 0
+                            });
+                        }
+                    }
+                    else {
+                        res.status(400).send({
+                            message: "Bad request, index out of bounds",
+                            status: 400,
+                        });
+                    }
+                }
+                else {
+                    res.status(400).send({
+                        message: "Bad request, invalid category",
+                        status: 400,
+                    });
+                }
+            });
+            const game = new Game({
+                user: validated._id,
+                timestamp: getMDY(),
+                score,
+                attempt: {
+                    category,
+                    questions: finalMarks,
+                }
+            });
+            validated.pastGames.push(game._id);
+            await game.save();
+            await validated.save();
+            res.status(200).send({
+                message: "OK, Test successfully evaluated",
+                score,
+                results: finalMarks,
+                status: 200,
+            });
+        }
+        else {
+            res.status(400).send({
+                message: "Bad request, invalid sessionId",
+                status: 400,
+            });
+        }
+    }
+    else {
+        res.status(400).send({
+            message: "Bad request, please provide proper information",
+            status: 400,
+        });
+    }
+};
+
+export { fetchTestsHandler, evaluateTestHandler, deleteTestHandler, fetchQuestionHandler, evaluateQuestionsHandler };

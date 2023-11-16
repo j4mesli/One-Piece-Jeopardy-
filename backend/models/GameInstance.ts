@@ -13,7 +13,7 @@ const gameSchema = new mongoose.Schema({
         questions: [
             {
                 question: String,
-                responses: Array,
+                response: String,
                 answer: String,
                 points: Number
             }

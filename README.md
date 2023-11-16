@@ -9,7 +9,7 @@ The content below is an example project proposal / requirements document. Replac
 * Characters
 * Abilities (Haki, Devil Fruit, etc.)
 
-A user would have to pick one of the three categories and answer three questions (randomly selected from stored .json files on backend). Then, a user answers each question to their best of ability (Three tries per question. If you miss it, that's tragic!). After the user completes the game, they have the option to save it to their profile, which they can access anytime to view past games.
+A user would have to pick one of the three categories and answer three questions (randomly selected from stored .json files on backend). Then, a user answers each question to their best of ability (One try per question. If you miss it, that's tragic!). After the user completes the game, they have the option to save it to their profile, which they can access anytime to view past games.
 
 By the nature of this game randomly selecting things, functionality will need to be implemented to randomly select three questions from each .json. I'm thinking to implement a cron job at [pythonanywhere](https://www.pythonanywhere.com) and run a Python script to use the GitHub API to grab my GitHub credentials and select three questions to use once a day at 12:00 AM UCT. 
 
@@ -18,6 +18,8 @@ By the nature of this game randomly selecting things, functionality will need to
 The application will store Users and Past Games 
 
 * Users will have the ability to view their past games by a relation
+* Users can see their total scored points on their profile
+* A leaderboard of people with the highest points can also be seen
 * Past games can be accessed by user via an `id` parameter.
 An Example User:
 
@@ -48,25 +50,21 @@ An Example of a Past Game:
           "CS2"
         ],
         answer: "CS2",
-        points: 3
+        points: 1 // one start difficulty, one point
       },
       {
         question: "This game sucks more",
         responses: [ 
-          "Overwatch",
           "Valorant"
         ],
         answer: "VALORANT", // case insensitive detection
-        points: 2
+        points: 1
       },
         question: "This game is the best of all time",
         responses: [ 
-          "The Last of Us",
-          "Pokemon: Legends Arceus",
           "tea##$mfortress2!"
         ],
-        // TODO (maybe): implement custom Longest Common Subsequence O(M*N) dynamic programming algorithm for fuzzy search
-        answer: "Team Fortress 2", // fuzzy search to answer, matches result
+        answer: "Team Fortress 2", // fuzzy match to answer, matches result
         points: 1
     ]
   }
@@ -99,7 +97,7 @@ An Example of a Past Game:
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
 3. as a user, I can view my past games (if any)
-4. as a user, I can play the game (if logged in and refreshes, the game data persists as a JWT)
+4. as a user, I can play the game
 
 ## Research Topics
 
