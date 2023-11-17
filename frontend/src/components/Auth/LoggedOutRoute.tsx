@@ -10,7 +10,7 @@ const LoggedOutRoute = () => {
     return null;
   }
 
-  return !isAuthenticated ? <Outlet /> : <Navigate to="/profile" replace />;
+  return !isAuthenticated ? <Outlet /> : <Navigate to="/game" replace />;
 };
 
 export default LoggedOutRoute;

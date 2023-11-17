@@ -9,6 +9,7 @@ import Profile from './views/Profile/Profile';
 import LoggedInRoute from './components/Auth/LoggedInRoute';
 import LoggedOutRoute from './components/Auth/LoggedOutRoute';
 import UserSession from './types/UserSession';
+import Leaderboard from './views/Leaderboard/Leaderboard';
 
 // make our project aware of the custom property we add to Window
 declare global {
@@ -88,6 +89,7 @@ function App() {
     <div className="App container">
       <BrowserRouter>
         {hasSession && <Header />}
+        <h1 className="App-title"><i>One Piece</i> Jeopardy!</h1>
         <Routes>
           <Route element={<LoggedOutRoute />}>
             <Route path="/login" element={<Login />} />
@@ -96,6 +98,7 @@ function App() {
           <Route element={<LoggedInRoute />}>
             <Route path="/game" element={<Game />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
           </Route>
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>

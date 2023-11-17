@@ -21,6 +21,6 @@ function GameQuestion(props: GameQuestionProps) {
         </form>        
       </div>
     );
-  }
-  
-  export default GameQuestion;
+}
+
+export default GameQuestion;

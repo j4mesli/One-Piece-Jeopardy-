@@ -5,6 +5,9 @@ export interface GameUser extends Document {
     passwordHash: string;
     salt: string;
     sessionId: string | null;
+    lastPlayed: string | null;
+    points: number;
+    avatar: string;
     pastGames: Schema.ObjectId[];
     setPassword: (password: string) => void;
     validatePassword: (password: string) => boolean;

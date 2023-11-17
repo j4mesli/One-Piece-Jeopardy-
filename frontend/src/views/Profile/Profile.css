@@ -1,0 +1,37 @@
+.profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
+
+.profile-info-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 10px;
+}
+
+.profile-info-item h5, .profile-info-item p {
+    margin: 0;
+    margin-left: 10px;
+}
+
+.profile-info-item p {
+    font-size: 1.75rem;
+}
+
+.edit {
+    font-size: 1.5rem;
+    color: rgba(34,34,34,0.67);
+    cursor: pointer;
+    transition: .2s ease-in-out;
+}
+.edit:hover {
+    color: rgba(34,34,34,0.87);
+    transform: translateY(1px);
+}

@@ -33,10 +33,41 @@ function Header() {
       console.error('Error during form submission:', error);
     }
   };
+  const handleProfile = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    navigate('/profile');
+  };
+  const handleGame = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    navigate('/');
+  };
+  const handleLeaderboard = (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    e.preventDefault();
+    navigate('/leaderboard');
+  };
 
   return (
     <div className="header">
-        <a className="logoutLink" onClick={ handleLogout }>Logout</a>
+      <a title="Game" className="link" onClick={ handleGame }>
+        <span className="material-symbols-outlined">
+          sports_esports
+        </span>
+      </a>
+      <a title="Leaderboard" className="link" onClick={ handleLeaderboard }>
+        <span className="material-symbols-outlined">
+          social_leaderboard
+        </span>
+      </a>
+      <a title="Profile" className="link" onClick={ handleProfile }>
+        <span className="material-symbols-outlined">
+          account_circle
+        </span>
+      </a>
+      <a title="Logout" className="link" onClick={ handleLogout }>
+        <span className="material-symbols-outlined">
+          logout
+        </span>
+      </a>
     </div>
   );
 }

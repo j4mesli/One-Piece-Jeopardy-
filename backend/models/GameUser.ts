@@ -7,6 +7,9 @@ const userSchema = new mongoose.Schema<GameUser>({
     passwordHash: String,
     salt: String,
     sessionId: String || null,
+    lastPlayed: Date || null,
+    points: Number,
+    avatar: String,
     pastGames: [{
         type: mongoose.Types.ObjectId,
         ref: 'Game'

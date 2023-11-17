@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import crypto from "crypto";
 import User from "../models/GameUser";
 import getMDY from "../functions/getMDY";
+import avatars from "../json/avatars.json";
 
 const logoutHandler = async (req: Request, res: Response) => {
     const headers = req.headers;
@@ -59,13 +60,18 @@ const loginHandler = async (req: Request, res: Response) => {
             else { 
                 if (user.validatePassword(headers.password as string)) { 
                     const id = crypto.randomBytes(16).toString('base64');
-                    await user.updateOne({ sessionId: id });
+                    if (!user.avatar) {
+                        user.avatar = avatars[Math.floor(Math.random() * avatars.length)];
+                    }
+                    user.sessionId = id;
+                    await user.save();
                     return res.status(201).send({ 
                         message : "User Logged In", 
                         status: 201,
                         session: {
                             sessionId: id,
                             username: user.username,
+                            avatar: user.avatar,
                             timestamp: getMDY(),
                         }
                     });
@@ -114,6 +120,7 @@ const registerHandler = async (req: Request, res: Response) => {
             sessionId: crypto.randomBytes(16).toString('base64'),
         });
         newUser.setPassword(headers.password);
+        newUser.avatar = avatars[Math.floor(Math.random() * avatars.length)];
 
         try {
             const savedUser = await newUser.save();
@@ -193,4 +200,214 @@ const verifySessionHandler = async (req: Request, res: Response) => {
     }
 };
 
-export { loginHandler, logoutHandler, registerHandler, verifySessionHandler };
+const evaluatePlayedToday = async (req: Request, res: Response) => {
+    const headers = req.headers;
+    if (headers.sessionid && headers.username) {
+        headers.username = (headers.username as string).toLowerCase();
+        headers.sessionid = headers.sessionid as string;
+        try {
+            const user = await User.findOne({ username: headers.username as string });
+            if (user === null) { 
+                return res.status(400).send({ 
+                    message : "User not found.",
+                    status: 400
+                }); 
+            } 
+            else { 
+                if (user.sessionId === headers.sessionid) { 
+                    if (!user.lastPlayed) {
+                        return res.status(201).send({ 
+                            message : "Can Play", 
+                            playedToday: false,
+                            status: 201,
+                        });
+                    }
+                    else if (user.lastPlayed !== getMDY().toISOString()) {
+                        return res.status(201).send({ 
+                            message : "Can Play",
+                            playedToday: false,
+                            status: 201,
+                        });
+                    }
+                    else {
+                        return res.status(401).send({ 
+                            message : "Can't play",
+                            playedToday: true,
+                            status: 401
+                        });
+                    }
+                } 
+                else { 
+                    return res.status(401).send({ 
+                        message : "Session Invalid",
+                        status: 401
+                    }); 
+                } 
+            }
+        }
+        catch(err) {
+            console.error('Error verifying session:', err);
+            res.status(400).send({
+                message: "Error verifying session: " + err,
+                error: err,
+                status: 400,
+            });
+        };
+    }
+    else {
+        res.status(400).send({
+            message: "Missing id or username",
+            status: 400
+        });
+    }
+};
+
+const fetchUser = async (req: Request, res: Response) => {
+    const headers = req.headers;
+    if (headers.sessionid && headers.username) {
+        const username = (headers.username as string).toLowerCase();
+        const sessionid = headers.sessionid as string;
+        const user = await User.findOne({ sessionId: sessionid });
+        if (user) {
+            if (user.username !== username) {
+                return res.status(400).send({
+                    message: "Username does not match!",
+                    status: 400
+                });
+            }
+            res.status(200).send({
+                user: {
+                    username: user.username,
+                    avatar: user.avatar,
+                    lastPlayed: user.lastPlayed,
+                    points: user.points,
+                },
+                message: "User found",
+                status: 200,
+            });
+        }
+        else {
+            res.status(400).send({
+                message: "Session Invalid",
+                status: 400
+            });
+        }
+    }
+    else {
+        res.status(400).send({
+            message: "Bad request",
+            status: 400
+        });
+    }
+};
+
+const updateUser = async (req: Request, res: Response) => {
+    const headers = req.headers;
+    if (headers.sessionid) {
+        const validated = await User.findOne({ sessionId: headers.sessionid as string });
+        if (validated) {
+            if (headers.newusername || headers.newAvatar) {
+                const newUsername = (headers.newusername as string).toLowerCase();
+                const newAvatar = headers.newavatar as string;
+                if (newUsername) {
+                    const existingUser = await User.findOne({ username: newUsername });
+                    if (existingUser) {
+                        return res.status(400).send({
+                            message: "Username already exists!",
+                            status: 400
+                        });
+                    }
+                    await validated.updateOne({ username: newUsername });
+                }
+                if (newAvatar) {
+                    await validated.updateOne({ avatar: newAvatar });
+                }
+                res.status(200).send({
+                    user: {
+                        username: newUsername,
+                        avatar: validated.avatar,
+                        lastPlayed: validated.lastPlayed,
+                        points: validated.points,
+                    },
+                    message: "User updated",
+                    status: 200,
+                });
+            }
+            else {
+                res.status(400).send({
+                    message: "Please provide a username or avatar",
+                    status: 400
+                });
+            }
+        }
+        else {
+            res.status(400).send({
+                message: "Session Invalid",
+                status: 400
+            });
+        }
+    }
+    else {
+        res.status(400).send({
+            message: "Bad request",
+            status: 400
+        });
+    }
+};
+
+const fetchUserRank = async (req: Request, res: Response) => {
+    const headers = req.headers;
+    if (headers.sessionid && headers.username) {
+        const username = (headers.username as string).toLowerCase();
+        const sessionid = headers.sessionid as string;
+        const user = await User.findOne({ sessionId: sessionid });
+        if (user) {
+            if (username === user.username) {
+                // Aggregation pipeline, MongoDB equivalent of the query:
+                // SELECT username, points, RANK() OVER (ORDER BY points DESC) AS rank
+                // FROM users
+                // WHERE username = 'specificUsername';
+                const userRank = await User.aggregate([
+                    { $sort: { points: -1 } },
+                    {
+                        $setWindowFields: {
+                            sortBy: { points: -1 },
+                            output: { rank: { $rank: {} } }
+                        }
+                    },
+                    { $match: { username: username } },
+                    { $limit: 1 }
+                ]);
+                if (userRank.length === 0) {
+                    return res.status(400).send({
+                        message: "User ranking not found!",
+                        status: 400
+                    });
+                }
+                const rank = userRank[0].rank;
+                res.status(200).send({
+                    username,
+                    rank: rank,
+                    points: user.points,
+                    message: "User rank found",
+                    status: 200,
+                });
+            }
+        }
+        else {
+            res.status(400).send({
+                message: "Session Invalid",
+                status: 400
+            });
+        
+        }
+    }
+    else {
+        res.status(400).send({
+            message: "Bad request",
+            status: 400
+        });
+    }
+}
+
+export { loginHandler, logoutHandler, registerHandler, verifySessionHandler, evaluatePlayedToday, fetchUser, updateUser, fetchUserRank };

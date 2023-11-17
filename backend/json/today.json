@@ -13,7 +13,8 @@
                 "question": "This arc is where Luffy first demonstrates Gear Second and Gear Third while battling against CP9. What is...?",
                 "answer": "Enies Lobby"
             }
-        ]
+        ],
+        "difficulty": 2
     },
     "characters": {
         "questions": [
@@ -29,7 +30,8 @@
                 "question": "This character, originally from Drum Island, is noted for his blue-nose and ability to shapeshift. Who is...?",
                 "answer": "Tony Tony Chopper"
             }
-        ]
+        ],
+        "difficulty": 1
     },
     "abilities": {
         "questions": [
@@ -45,6 +47,7 @@
                 "question": "This Devil Fruit ability grants the power to transform into a hybrid and full giraffe form. What is...?",
                 "answer": "Ushi Ushi no Mi, Model: Giraffe"
             }
-        ]
+        ],
+        "difficulty": 3
     }
 }

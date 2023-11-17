@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import testQuestions from "../questions/testQuestions.json";
-import today from "../questions/today.json";
+import testQuestions from "../json/testQuestions.json";
+import today from "../json/today.json";
 import User from "../models/GameUser";
 import { GameUser } from "../types/GameUser";
 import Game from "../models/GameInstance";
@@ -130,6 +130,37 @@ const deleteTestHandler = async (req: Request, res: Response) => {
     }
 };
 
+const fetchDifficultiesHandler = async (req: Request, res: Response) => {
+    const headers = req.headers;
+    if (headers.sessionid) {
+        const sessionId = headers.sessionid as string;
+        const validated = await User.findOne({ sessionId: sessionId });
+        if (validated) {
+            res.status(200).send({
+                message: "OK, Difficulties successfully fetched",
+                difficulties: {
+                    characters: _today.characters.difficulty,
+                    abilities: _today.abilities.difficulty,
+                    arcs: _today.arcs.difficulty,
+                },
+                status: 200,
+            });
+        }
+        else {
+            res.status(400).send({
+                message: "Bad request, invalid sessionId",
+                status: 400,
+            });
+        }
+    }
+    else {
+        res.status(400).send({
+            message: "Bad request, please provide proper information",
+            status: 400,
+        });
+    }
+};
+
 const fetchQuestionHandler = async (req: Request, res: Response) => {
     const headers = req.headers;
     if (headers.category && headers.index && headers.sessionid) {
@@ -243,10 +274,17 @@ const evaluateQuestionsHandler = async (req: Request, res: Response) => {
                 }
             });
             validated.pastGames.push(game._id);
+            validated.lastPlayed = getMDY().toISOString();
+            if (!validated.points) {
+                validated.points = score;
+            }
+            else {
+                validated.points += score;
+            }
             await game.save();
             await validated.save();
             res.status(200).send({
-                message: "OK, Test successfully evaluated",
+                message: "OK, questions successfully evaluated",
                 score,
                 results: finalMarks,
                 status: 200,
@@ -267,4 +305,4 @@ const evaluateQuestionsHandler = async (req: Request, res: Response) => {
     }
 };
 
-export { fetchTestsHandler, evaluateTestHandler, deleteTestHandler, fetchQuestionHandler, evaluateQuestionsHandler };
+export { fetchTestsHandler, evaluateTestHandler, deleteTestHandler, fetchDifficultiesHandler, fetchQuestionHandler, evaluateQuestionsHandler };

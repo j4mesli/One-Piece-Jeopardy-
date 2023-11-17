@@ -5,15 +5,72 @@ import CategorySelection from "../../components/Game/CategorySelection";
 import UserSession from "../../types/UserSession";
 import { responseArr } from "../../types/responseArr";
 import GameQuestion from "../../components/Game/GameQuestion";
+import { EndGame } from "../../types/EndGame";
+import EndGameComponent from "../../components/Game/EndGameComponent";
+import getMDY from "../../functions/getMDY";
 
 function Game() {
   const [inGame, setInGame] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
   const [category, setCategory] = useState("");
+  const [difficulties, setDifficulties] = useState({} as { [key: string]: number });
   const [responseArray] = useState([] as responseArr);
   const [currQuestion, setCurrQuestion] = useState("");
   const [index, setIndex] = useState(0);
+  const [endGame, setEndGame] = useState<EndGame | undefined>();
+  const [showEndGame, setShowEndGame] = useState(false);
   const userSessionObject: UserSession = JSON.parse(sessionStorage.getItem('session')!);
+
+  // useEffect for checking if played today
+  useEffect(() => {
+    const recentGameRaw = sessionStorage.getItem('recentGame');
+    if (recentGameRaw) {
+      const recentGame = JSON.parse(recentGameRaw);
+      if (recentGame.timestamp === getMDY().toISOString()) {
+        setInGame(true);
+        setShowEndGame(true);
+        setEndGame(recentGame.game);
+      }
+    }
+    else {
+      const endpoint = 'http://localhost:3000/evaluatePlayedToday';
+      const headers = new Headers();
+      headers.append("Content-Type", "application/json");
+      headers.append("username", userSessionObject.username);
+      headers.append("sessionId", userSessionObject.sessionId);
+      const evaluatePlayed = async () => {
+        const res = await fetch(endpoint, {
+          method: "GET",
+          headers: headers,
+          });
+        const data = await res.json();
+        if (data.playedToday) {
+          setInGame(true);
+          setShowEndGame(true);
+          setEndGame(data.recentGame);
+        }
+      }
+      evaluatePlayed();
+    }
+  }, []);
+
+  // useEffect for getting category difficulties
+  useEffect(() => {
+    const endpoint = `http://localhost:3000/getDifficulties`;
+    const headers = new Headers();
+    headers.append("Content-Type", "application/json");
+    headers.append("category", category);
+    headers.append("sessionId", userSessionObject.sessionId);
+    const getCategoryDifficulties = async () => {
+      const res = await fetch(endpoint, {
+        method: "GET",
+        headers: headers,
+      });
+      const data = await res.json();
+      setDifficulties(data.difficulties);
+    }
+    getCategoryDifficulties();
+  }, [category]);
 
   // useEffect for fetching first question after select
   useEffect(() => {
@@ -37,10 +94,26 @@ function Game() {
       fetchQuestion(index);
     }
     else if (index === 3){
-      console.log(responseArray);
       submitAnswer();
     }
   }, [index]);
+
+  // useEffect for handling end game
+  useEffect(() => {
+    if (endGame !== undefined) {
+      handleEndGame();
+    }
+  }, [endGame]);
+
+  // end game method
+  const handleEndGame = () => {
+    setShowEndGame(true);
+    const recentGame = {
+      game: endGame,
+      timestamp: getMDY()
+    }
+    sessionStorage.setItem('recentGame', JSON.stringify(recentGame));
+  }
 
   const handleSelection = (category: string) => () => {
     setCategory(category);
@@ -81,14 +154,14 @@ function Game() {
       headers: headers,
     });
     const data = await res.json();
-    console.log(data);
+    setEndGame(data);
   };
 
   return (
     <div className="game">
-      <h1><i>One Piece</i> Jeopardy!</h1>
-      {!inGame && <CategorySelection makeSelection={handleSelection} />}
+      {!inGame && <CategorySelection makeSelection={handleSelection} difficulties={difficulties} />}
       {showQuestion && <GameQuestion makeAnswer={handleAnswer} index={index} question={currQuestion} />}
+      {showEndGame && <EndGameComponent endGame={endGame!} difficulties={difficulties} category={category} />}
     </div>
   );
 }
