@@ -27,4 +27,4 @@ setup();
 app.use('/', userRoutes);
 app.use('/', gameRoutes);
 
-app.listen(process.env.PORT || 3000, () => { console.log("backend listening on port 3000 at http://localhost:3000") });
+app.listen(process.env.PORT || 3000, () => { console.log("backend listening on port 3000 at localhost:3000") });

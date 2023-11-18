@@ -45,7 +45,7 @@ function ChangeAvatar(props: ChangeAvatarProps) {
   
   const handleSubmit = async (avatar: string) => {
     if (avatar !== 'filler') {
-      const endpoint = 'http://localhost:3000/updateUser';
+      const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/updateUser';
       const session = JSON.parse(sessionStorage.getItem('session')!);
       const headers = new Headers();
       headers.append('Content-Type', 'application/json');

@@ -14,7 +14,7 @@ function Header() {
     headers.append('username', session.username);
     headers.append('sessionId', session.sessionId);
     try {
-      const response = await fetch('http://localhost:3000/logout', {
+      const response = await fetch('https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/logout', {
         method: 'POST',
         headers: headers,
       });
