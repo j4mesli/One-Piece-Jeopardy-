@@ -21,6 +21,9 @@ function Header() {
       const result: LogoutResponse = await response.json();
       if (result.status === 201) {
         sessionStorage.removeItem('session');
+        if (sessionStorage.getItem('recentGame')) {
+          sessionStorage.removeItem('recentGame');
+        }
         // throw flag to update session state of user information
         window.updateSessionState();
         navigate('/');

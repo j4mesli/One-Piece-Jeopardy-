@@ -237,9 +237,9 @@ const evaluateQuestionsHandler = async (req: Request, res: Response) => {
                                 question: question.question, 
                                 response: answer, 
                                 answer: question.answer, 
-                                points: category === "characters" ? 2 : (category === "abilities" ? 3 : 1)
+                                points: _today[category].difficulty
                             });
-                            score += category === "characters" ? 2 : (category === "abilities" ? 3 : 1);
+                            score += _today[category].difficulty;
                         }
                         else {
                             finalMarks.push({
@@ -288,6 +288,7 @@ const evaluateQuestionsHandler = async (req: Request, res: Response) => {
                 score,
                 results: finalMarks,
                 status: 200,
+                category
             });
         }
         else {

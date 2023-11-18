@@ -1,7 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import "./Register.css";
 
 function Register() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const navigate = useNavigate();
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const { username, password } = event.currentTarget;
 
@@ -35,22 +37,42 @@ function Register() {
       alert('Password must contain at least one special character.');
       return;
     }
+
+    const endpoint = 'http://localhost:3000/register';
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('username', username.value);
+    headers.append('password', password.value);
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      headers: headers,
+    });
+    const data = await res.json();
+    if (data.status !== 200) {
+      alert(data.message);
+    }
+    else {
+      const session = data.user;
+      sessionStorage.setItem('session', JSON.stringify(session));
+      navigate('/game');
+    }
   };
 
   return (
     <div className="register">
-        <form action="http://localhost:3000/register" method="POST" className="registerForm" onSubmit={ handleSubmit }>
-            <h1>Register</h1>
-            <div className="registerFormInput">
-                <label htmlFor="username">Username</label>
-                <input type="username" name="username" id="username" placeholder="Enter your username" />
-            </div>
-            <div className="registerFormInput">
-                <label htmlFor="password">Password</label>
-                <input type="password" name="password" id="password" placeholder="Enter your password" />
-            </div>
-            <button type="submit">Register</button>
-        </form>
+      <form action="http://localhost:3000/register" method="POST" className="registerForm" onSubmit={ handleSubmit }>
+        <h1>Register</h1>
+        <div className="registerFormInput">
+            <label htmlFor="username">Username</label>
+            <input type="text" name="username" id="username" placeholder="Enter your username" />
+        </div>
+        <div className="registerFormInput">
+            <label htmlFor="password">Password</label>
+            <input type="password" name="password" id="password" placeholder="Enter your password" />
+        </div>
+        <button type="submit">Register</button>
+        <p>Already have an account? <a style={{ cursor: "pointer" }} onClick={ () => navigate('/login') }>Login here!</a></p>
+      </form>
     </div>
   );
 }

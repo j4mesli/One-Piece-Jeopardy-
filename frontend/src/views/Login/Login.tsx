@@ -48,6 +48,7 @@ function Login() {
                 <input type="password" name="password" id="password" placeholder="Enter your password" />
             </div>
             <button type="submit">Login</button>
+            <p>Don't have an account? <a style={{ cursor: "pointer" }} onClick={ () => navigate('/register') }>Register here!</a></p>
         </form>
     </div>
   );

@@ -3,6 +3,7 @@ import crypto from "crypto";
 import User from "../models/GameUser";
 import getMDY from "../functions/getMDY";
 import avatars from "../json/avatars.json";
+import Game from "../models/GameInstance";
 
 const logoutHandler = async (req: Request, res: Response) => {
     const headers = req.headers;
@@ -128,6 +129,7 @@ const registerHandler = async (req: Request, res: Response) => {
                 user: {
                     username: savedUser.username,
                     sessionId: savedUser.sessionId,
+                    avatar: savedUser.avatar,
                     timestamp: getMDY(),
                 },
                 message: "User created",
@@ -222,7 +224,7 @@ const evaluatePlayedToday = async (req: Request, res: Response) => {
                             status: 201,
                         });
                     }
-                    else if (user.lastPlayed !== getMDY().toISOString()) {
+                    else if ((user.lastPlayed as unknown as Date).toISOString() !== getMDY().toISOString()) {
                         return res.status(201).send({ 
                             message : "Can Play",
                             playedToday: false,
@@ -306,11 +308,11 @@ const updateUser = async (req: Request, res: Response) => {
     if (headers.sessionid) {
         const validated = await User.findOne({ sessionId: headers.sessionid as string });
         if (validated) {
-            if (headers.newusername || headers.newAvatar) {
-                const newUsername = (headers.newusername as string).toLowerCase();
+            if (headers.newusername || headers.newavatar) {
+                const newUsername = (headers.newusername as string);
                 const newAvatar = headers.newavatar as string;
                 if (newUsername) {
-                    const existingUser = await User.findOne({ username: newUsername });
+                    const existingUser = await User.findOne({ username: newUsername.toLowerCase() });
                     if (existingUser) {
                         return res.status(400).send({
                             message: "Username already exists!",
@@ -324,8 +326,9 @@ const updateUser = async (req: Request, res: Response) => {
                 }
                 res.status(200).send({
                     user: {
-                        username: newUsername,
-                        avatar: validated.avatar,
+                        // nullish coalesce new if exists, otherwise old
+                        username: newUsername ?? validated.username,
+                        avatar: newAvatar ?? validated.avatar,
                         lastPlayed: validated.lastPlayed,
                         points: validated.points,
                     },
@@ -410,4 +413,43 @@ const fetchUserRank = async (req: Request, res: Response) => {
     }
 }
 
-export { loginHandler, logoutHandler, registerHandler, verifySessionHandler, evaluatePlayedToday, fetchUser, updateUser, fetchUserRank };
+const fetchMostRecentGame = async (req: Request, res: Response) => {
+    const headers = req.headers;
+    if (headers.sessionid && headers.username) {
+        const username = (headers.username as string).toLowerCase();
+        const sessionid = headers.sessionid as string;
+        const user = await User.findOne({ sessionId: sessionid });
+        if (user) {
+            const game = await Game.findOne({ user: user._id }).sort({ timestamp: -1 });
+            if (game) {
+                res.status(200).send({
+                    score: game.score,
+                    category: game.attempt ? game.attempt.category : 'characters',
+                    results: game.attempt!.questions,
+                    message: "Most recent game found",
+                    status: 200,
+                });
+            }
+            else {
+                res.status(400).send({
+                    message: "No games found!",
+                    status: 400
+                });
+            }
+        }
+        else {
+            res.status(400).send({
+                message: "Session Invalid",
+                status: 400
+            });
+        }
+    }
+    else {
+        res.status(400).send({
+            message: "Bad request",
+            status: 400
+        });
+    }
+}
+
+export { loginHandler, logoutHandler, registerHandler, verifySessionHandler, evaluatePlayedToday, fetchUser, updateUser, fetchUserRank, fetchMostRecentGame };

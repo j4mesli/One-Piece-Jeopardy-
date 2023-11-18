@@ -59,7 +59,6 @@ function Profile() {
   // change avatar
   const handleChangeAvatar = async (flag: boolean) => {
     setChangingAvatar(flag);
-    console.log('change avatar');
   };
 
   return (
@@ -83,7 +82,7 @@ function Profile() {
           </div>
         </div>
       </div>}
-      {changingAvatar && <ChangeAvatar changeAvatar={ handleChangeAvatar } setUser={setUser} />}
+      {changingAvatar && <ChangeAvatar changeAvatar={ handleChangeAvatar } setUser={setUser} user={user!} />}
       {changingUsername && <ChangeUsername changeUsername={ handleChangeUsername } setUser={setUser} />}
     </>
   );

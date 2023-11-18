@@ -45,9 +45,45 @@ function Game() {
           });
         const data = await res.json();
         if (data.playedToday) {
-          setInGame(true);
-          setShowEndGame(true);
-          setEndGame(data.recentGame);
+          if (!sessionStorage.getItem('recentGame')) {
+            const headers2 = new Headers();
+            headers2.append("Content-Type", "application/json");
+            headers2.append("username", userSessionObject.username);
+            headers2.append("sessionId", userSessionObject.sessionId);
+            const endpoint2 = `http://localhost:3000/fetchMostRecentGame`;
+            fetch(endpoint2, {
+              method: "GET",
+              headers: headers2,
+            }).then(res => res.json())
+            .then(data => {
+              if (data.status >= 400) {
+                alert(data.message);
+              }
+              else {
+                const recentGame = {
+                  game: {
+                    category: data.category,
+                    score: data.score,
+                    results: data.results
+                  },
+                  timestamp: getMDY()
+                }
+                sessionStorage.setItem('recentGame', JSON.stringify(recentGame));
+              }
+            })
+            .then(
+              () => {
+                setInGame(true);
+                setShowEndGame(true);
+                setEndGame(JSON.parse(sessionStorage.getItem('recentGame')!).game);
+              }
+            );
+          }
+          else {
+            setInGame(true);
+            setShowEndGame(true);
+            setEndGame(data.recentGame);
+          }
         }
       }
       evaluatePlayed();
