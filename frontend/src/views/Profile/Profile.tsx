@@ -32,6 +32,7 @@ function Profile() {
       headers: headers,
     });
     const data = await res.json();
+    console.log(data.user);
     setUser(data.user);
   };
 
@@ -74,11 +75,11 @@ function Profile() {
           </div>
           <div className="profile-info-item">
             <h5>Total Points:&nbsp;</h5>
-            <b><p>{user.points}</p></b>
+            <b><p>{user.points ? user.points : 0}</p></b>
           </div>
           <div className="profile-info-item">
             <h5>Last Played Game:&nbsp;</h5>
-            <b><p>{formatDate(new Date(user.lastPlayed).toString())}</p></b>
+            <b><p>{user.lastPlayed ? formatDate(new Date(user.lastPlayed).toString()) : "N/A"}</p></b>
           </div>
         </div>
       </div>}
