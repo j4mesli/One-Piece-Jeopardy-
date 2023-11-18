@@ -50,8 +50,9 @@ const logoutHandler = async (req: Request, res: Response) => {
 const loginHandler = async (req: Request, res: Response) => {
     const headers = req.headers;
     if (headers.username && headers.password) {
+        headers.username = (headers.username as string).toLowerCase();
         try {
-            const user = await User.findOne({ username: headers.username as string });
+            const user = await User.findOne({ username: headers.username });
             if (user === null) { 
                 return res.status(400).send({ 
                     message : "User not found.",
@@ -319,7 +320,7 @@ const updateUser = async (req: Request, res: Response) => {
                             status: 400
                         });
                     }
-                    await validated.updateOne({ username: newUsername });
+                    await validated.updateOne({ username: newUsername.toLowerCase() });
                 }
                 if (newAvatar) {
                     await validated.updateOne({ avatar: newAvatar });
