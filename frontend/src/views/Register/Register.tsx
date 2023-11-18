@@ -54,6 +54,7 @@ function Register() {
     else {
       const session = data.user;
       sessionStorage.setItem('session', JSON.stringify(session));
+      window.updateSessionState();
       navigate('/game');
     }
   };
