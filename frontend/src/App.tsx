@@ -43,7 +43,7 @@ function App() {
       const session: UserSession = JSON.parse(sessionData);
       
       try {
-        const response = await fetch('https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/verifySession', {
+        const response = await fetch('https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//verifySession', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

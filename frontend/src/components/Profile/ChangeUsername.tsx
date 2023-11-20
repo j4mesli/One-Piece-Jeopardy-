@@ -10,7 +10,7 @@ interface ChangeUsernameProps {
 function ChangeUsername(props: ChangeUsernameProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/updateUser';
+    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//updateUser';
     const newUsername = e.currentTarget.newUsername.value as string;
     const session = JSON.parse(sessionStorage.getItem('session')!);
     const headers = new Headers();
@@ -36,7 +36,7 @@ function ChangeUsername(props: ChangeUsernameProps) {
 
   return (
     <div className="changeUsername">
-      <form action="https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/updateUser" method="POST" onSubmit={ handleSubmit }>
+      <form action="https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//updateUser" method="POST" onSubmit={ handleSubmit }>
         <label htmlFor="newUsername">New Username</label>
         <input required type="text" id="newUsername" name="newUsername" placeholder="New Username"></input>
         <button type="submit">Change Username</button>

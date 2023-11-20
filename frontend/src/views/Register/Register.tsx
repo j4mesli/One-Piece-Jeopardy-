@@ -38,7 +38,7 @@ function Register() {
       return;
     }
 
-    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/register';
+    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//register';
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('username', username.value);
@@ -61,7 +61,7 @@ function Register() {
 
   return (
     <div className="register">
-      <form action="https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/register" method="POST" className="registerForm" onSubmit={ handleSubmit }>
+      <form action="https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//register" method="POST" className="registerForm" onSubmit={ handleSubmit }>
         <h1>Register</h1>
         <div className="registerFormInput">
             <label htmlFor="username">Username</label>
