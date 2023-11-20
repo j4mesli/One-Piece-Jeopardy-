@@ -35,7 +35,7 @@ function Game() {
       }
     }
     else {
-      const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//evaluatePlayedToday';
+      const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/evaluatePlayedToday';
       const headers = new Headers();
       headers.append("Content-Type", "application/json");
       headers.append("username", userSessionObject.username);
@@ -52,7 +52,7 @@ function Game() {
             headers2.append("Content-Type", "application/json");
             headers2.append("username", userSessionObject.username);
             headers2.append("sessionId", userSessionObject.sessionId);
-            const endpoint2 = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//fetchMostRecentGame`;
+            const endpoint2 = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchMostRecentGame`;
             fetch(endpoint2, {
               method: "GET",
               headers: headers2,
@@ -95,7 +95,7 @@ function Game() {
 
   // useEffect for getting category difficulties
   useEffect(() => {
-    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//getDifficulties`;
+    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/getDifficulties`;
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("category", category);
@@ -159,7 +159,7 @@ function Game() {
   };
 
   const fetchQuestion = async (index: number) => {
-    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//fetchQuestion`;
+    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchQuestion`;
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("category", category);
@@ -180,7 +180,7 @@ function Game() {
   }
 
   const submitAnswer = async () => {
-    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//evaluateQuestions`;
+    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/evaluateQuestions`;
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("category", category);

@@ -13,7 +13,7 @@ function Leaderboard() {
 
   // Fetch leaderboard data
   useEffect(() => {
-    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com//fetchLeaderboard';
+    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchLeaderboard';
     const session = JSON.parse(sessionStorage.getItem('session')!);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
