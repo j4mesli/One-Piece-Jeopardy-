@@ -12,7 +12,7 @@ function EndGameComponent(props: EndGameProps) {
   const [difficulties, setDifficulties] = useState({} as { [key: string]: number });
   // useEffect for getting category difficulties
   useEffect(() => {
-    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/getDifficulties`;
+    const endpoint = `http://localhost:3000/getDifficulties`;
     const session: UserSession = JSON.parse(sessionStorage.getItem('session')!);
     const headers = new Headers();
     headers.append("Content-Type", "application/json");

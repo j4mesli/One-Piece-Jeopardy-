@@ -120,6 +120,7 @@ const registerHandler = async (req: Request, res: Response) => {
         const newUser = new User({
             username: headers.username,
             sessionId: crypto.randomBytes(16).toString('base64'),
+            points: 0,
         });
         newUser.setPassword(headers.password);
         newUser.avatar = avatars[Math.floor(Math.random() * avatars.length)];

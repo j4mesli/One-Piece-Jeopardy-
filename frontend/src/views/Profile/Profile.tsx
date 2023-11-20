@@ -21,7 +21,7 @@ function Profile() {
 
   // get raw profile information
   const fetchProfile = async () => {
-    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchUser';
+    const endpoint = 'http://localhost:3000/fetchUser';
     const session = JSON.parse(sessionStorage.getItem('session')!);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -38,7 +38,7 @@ function Profile() {
 
   // get user rank
   const fetchUserRank = async () => {
-    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchUserRank';
+    const endpoint = 'http://localhost:3000/fetchUserRank';
     const session = JSON.parse(sessionStorage.getItem('session')!);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
