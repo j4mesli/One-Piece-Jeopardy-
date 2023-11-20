@@ -9,7 +9,7 @@ import ChangeUsername from "../../components/Profile/ChangeUsername";
 
 function Profile() {
   const [user, setUser] = useState<User>();
-  const [rank, setRank] = useState(69420);
+  const [rank, setRank] = useState<number>();
   const [changingAvatar, setChangingAvatar] = useState(false);
   const [changingUsername, setChangingUsername] = useState(false);
 
@@ -21,7 +21,7 @@ function Profile() {
 
   // get raw profile information
   const fetchProfile = async () => {
-    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchUser';
+    const endpoint = 'http://localhost:3000/fetchUser';
     const session = JSON.parse(sessionStorage.getItem('session')!);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -32,13 +32,12 @@ function Profile() {
       headers: headers,
     });
     const data = await res.json();
-    console.log(data.user);
     setUser(data.user);
   };
 
   // get user rank
   const fetchUserRank = async () => {
-    const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchUserRank';
+    const endpoint = 'http://localhost:3000/fetchUserRank';
     const session = JSON.parse(sessionStorage.getItem('session')!);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -64,9 +63,9 @@ function Profile() {
 
   return (
     <>
-      {!user && <LoadingCircle />}
-      {user && <div className="profile">
-        <h3>Welcome, {user.username}!&nbsp;<span className="material-symbols-outlined edit" onClick={ () => handleChangeUsername(true) } title="Change Username">edit_square</span></h3>
+      {(!user || !rank) && <LoadingCircle />}
+      {(user && rank) && <div className="profile">
+        <h3>Welcome, <u>{ user.username.charAt(0).toUpperCase() + user.username.slice(1) }</u>!&nbsp;<span className="material-symbols-outlined edit" onClick={ () => handleChangeUsername(true) } title="Change Username">edit_square</span></h3>
         <Avatar user={user} changeAvatar={ handleChangeAvatar } />
         <div className="profile-info">
           <div className="profile-info-item">

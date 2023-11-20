@@ -13,6 +13,11 @@ export const formatDate = (dateString: string) => {
   }
 
   const date = new Date(dateString);
+  // if invalid date, return original string
+  if (isNaN(date.getTime())) {
+    return dateString;
+  }
+  
   const dayOfWeek = days[date.getDay()];
   const month = months[date.getMonth()];
   const dayOfMonth = date.getDate();

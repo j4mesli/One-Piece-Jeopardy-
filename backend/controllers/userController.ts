@@ -121,9 +121,9 @@ const registerHandler = async (req: Request, res: Response) => {
             username: headers.username,
             sessionId: crypto.randomBytes(16).toString('base64'),
             points: 0,
+            avatar: avatars[Math.floor(Math.random() * avatars.length)],
         });
         newUser.setPassword(headers.password);
-        newUser.avatar = avatars[Math.floor(Math.random() * avatars.length)];
 
         try {
             const savedUser = await newUser.save();

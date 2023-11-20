@@ -10,6 +10,7 @@ import LoggedInRoute from './components/Auth/LoggedInRoute';
 import LoggedOutRoute from './components/Auth/LoggedOutRoute';
 import UserSession from './types/UserSession';
 import Leaderboard from './views/Leaderboard/Leaderboard';
+// import Player from './components/Music/Player';
 
 // make our project aware of the custom property we add to Window
 declare global {
@@ -20,6 +21,7 @@ declare global {
 
 function App() {
   const [hasSession, setHasSession] = useState<boolean>(sessionStorage.getItem('session') !== null);
+  // const [showPlayer, setShowPlayer] = useState(false);
 
   const updateSessionState = useCallback(() => {
     setHasSession(sessionStorage.getItem('session') !== null);
@@ -41,7 +43,7 @@ function App() {
       const session: UserSession = JSON.parse(sessionData);
       
       try {
-        const response = await fetch('https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/verifySession', {
+        const response = await fetch('http://localhost:3000/verifySession', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -89,7 +91,7 @@ function App() {
     <div className="App container">
       <BrowserRouter>
         {hasSession && <Header />}
-        <h1 className="App-title"><i>One Piece</i> Jeopardy!</h1>
+        <h1 className="App-title one-piece">ONE P<span style={{ color: 'rgb(175,0,0)' }}>I</span>ECE JEOPARDY!</h1>
         <Routes>
           <Route element={<LoggedOutRoute />}>
             <Route path="/login" element={<Login />} />
@@ -103,6 +105,7 @@ function App() {
           <Route path="*" element={<Navigate to="/login" replace />} />
         </Routes>
       </BrowserRouter>
+      {/* <Player showMenu={showPlayer} togglePlayer={setShowPlayer} /> */}
     </div>
   );
 }

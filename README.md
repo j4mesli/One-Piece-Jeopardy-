@@ -46,24 +46,18 @@ An Example of a Past Game:
     questions: [
       {
         question: "This game sucks",
-        responses: [ // stores user responses
-          "CS2"
-        ],
+        response: "CS2", // stores user responses
         answer: "CS2",
         points: 1 // one start difficulty, one point
       },
       {
         question: "This game sucks more",
-        responses: [ 
-          "Valorant"
-        ],
+        response: "Valorant",
         answer: "VALORANT", // case insensitive detection
         points: 1
       },
         question: "This game is the best of all time",
-        responses: [ 
-          "tea##$mfortress2!"
-        ],
+        response: "tea##$mfortress2!",
         answer: "Team Fortress 2", // fuzzy match to answer, matches result
         points: 1
     ]
@@ -110,7 +104,9 @@ An Example of a Past Game:
     * if you try and submit an empty form, it will not let you.
 * (1 point) External Library: TypeScript
     * I will use TypeScript.
-* (2 points) Unit Testing
+* (1 point) External Library: React Table
+    * I'll use React Table for table formatting (Leaderboard)
+* (1 points) Unit Testing
     * I will use Jest for my unit tests.
 * (3 points (1+1+1)) Vite + React + ESLint
     * I will use Vite + React + ESLint for my frontend. I have experience, so I won't have to learn anything. Because of the overhead added, I'll assign it three (1 + 1 + 1) points.

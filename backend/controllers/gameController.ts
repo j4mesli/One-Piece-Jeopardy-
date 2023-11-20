@@ -232,7 +232,7 @@ const evaluateQuestionsHandler = async (req: Request, res: Response) => {
                         // fuzzy match for "close enough" answers
                         const similarity = fuzzy.fuzzy(answer, question.answer);
                         console.log(similarity);
-                        if (similarity > 0.9) {
+                        if (similarity > 0.85) {
                             finalMarks.push({
                                 question: question.question, 
                                 response: answer, 
@@ -306,4 +306,39 @@ const evaluateQuestionsHandler = async (req: Request, res: Response) => {
     }
 };
 
-export { fetchTestsHandler, evaluateTestHandler, deleteTestHandler, fetchDifficultiesHandler, fetchQuestionHandler, evaluateQuestionsHandler };
+const fetchLeaderboard = async (req: Request, res: Response) => {
+    const headers = req.headers;
+    if (headers.sessionid) {
+        const validated = await User.findOne({ sessionId: headers.sessionid });
+        if (validated) {
+            const leaderboard = (await User.find().sort({ points: -1 }).limit(20)).map(el => {
+                return {
+                    username: el.username,
+                    points: el.points,
+                    lastPlayed: el.lastPlayed ?? "N/A",
+                    avatar: el.avatar,
+                    gamesPlayed: el.pastGames.length,
+                };
+            });
+            res.status(200).send({
+                message: "OK, leaderboard successfully fetched",
+                leaderboard,
+                status: 200,
+            });
+        }
+        else {
+            res.status(400).send({
+                message: "Bad request, invalid sessionId",
+                status: 400,
+            });
+        }
+    }
+    else {
+        res.status(400).send({
+            message: "Bad request, please provide proper information",
+            status: 400,
+        });
+    }
+};
+
+export { fetchTestsHandler, evaluateTestHandler, deleteTestHandler, fetchDifficultiesHandler, fetchQuestionHandler, evaluateQuestionsHandler, fetchLeaderboard };

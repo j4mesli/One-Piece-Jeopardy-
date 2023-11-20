@@ -45,7 +45,7 @@ function ChangeAvatar(props: ChangeAvatarProps) {
   
   const handleSubmit = async (avatar: string) => {
     if (avatar !== 'filler') {
-      const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/updateUser';
+      const endpoint = 'http://localhost:3000/updateUser';
       const session = JSON.parse(sessionStorage.getItem('session')!);
       const headers = new Headers();
       headers.append('Content-Type', 'application/json');
@@ -84,10 +84,10 @@ function ChangeAvatar(props: ChangeAvatarProps) {
                 <img 
                   className={"selectImage" + (avatar === props.user.avatar ? " disabled" : "")}
                   src={ avatar === 'filler' ? "" : `/images/${avatar}.png` }
-                  style={{ opacity: avatar === 'filler' ? 0 : 1, cursor: avatar === 'filler' ? "default" : "pointer" }} 
                   alt={ avatar }
                   title={ avatar } 
                   onClick={ () => avatar === props.user.avatar ? "" : handleSubmit(avatar) }
+                  loading="lazy"
                 />
               </div>
             )) }
@@ -104,6 +104,7 @@ function ChangeAvatar(props: ChangeAvatarProps) {
                   alt={ avatar }
                   title={ avatar } 
                   onClick={ () => avatar === props.user.avatar ? "" : handleSubmit(avatar) }
+                  loading="lazy"
                 />
               </div>
             )) }

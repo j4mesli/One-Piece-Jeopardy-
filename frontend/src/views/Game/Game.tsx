@@ -8,8 +8,10 @@ import GameQuestion from "../../components/Game/GameQuestion";
 import { EndGame } from "../../types/EndGame";
 import EndGameComponent from "../../components/Game/EndGameComponent";
 import getMDY from "../../functions/getMDY";
+import LoadingCircle from "../../components/LoadingCircle/LoadingCircle";
 
 function Game() {
+  const [loading, setLoading] = useState(true);
   const [inGame, setInGame] = useState(false);
   const [showQuestion, setShowQuestion] = useState(false);
   const [category, setCategory] = useState("");
@@ -33,7 +35,7 @@ function Game() {
       }
     }
     else {
-      const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/evaluatePlayedToday';
+      const endpoint = 'http://localhost:3000/evaluatePlayedToday';
       const headers = new Headers();
       headers.append("Content-Type", "application/json");
       headers.append("username", userSessionObject.username);
@@ -50,7 +52,7 @@ function Game() {
             headers2.append("Content-Type", "application/json");
             headers2.append("username", userSessionObject.username);
             headers2.append("sessionId", userSessionObject.sessionId);
-            const endpoint2 = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchMostRecentGame`;
+            const endpoint2 = `http://localhost:3000/fetchMostRecentGame`;
             fetch(endpoint2, {
               method: "GET",
               headers: headers2,
@@ -88,11 +90,12 @@ function Game() {
       }
       evaluatePlayed();
     }
+    setLoading(false);
   }, []);
 
   // useEffect for getting category difficulties
   useEffect(() => {
-    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/getDifficulties`;
+    const endpoint = `http://localhost:3000/getDifficulties`;
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("category", category);
@@ -156,7 +159,7 @@ function Game() {
   };
 
   const fetchQuestion = async (index: number) => {
-    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/fetchQuestion`;
+    const endpoint = `http://localhost:3000/fetchQuestion`;
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("category", category);
@@ -177,7 +180,7 @@ function Game() {
   }
 
   const submitAnswer = async () => {
-    const endpoint = `https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/evaluateQuestions`;
+    const endpoint = `http://localhost:3000/evaluateQuestions`;
     const headers = new Headers();
     headers.append("Content-Type", "application/json");
     headers.append("category", category);
@@ -195,9 +198,11 @@ function Game() {
 
   return (
     <div className="game">
-      {!inGame && <CategorySelection makeSelection={handleSelection} difficulties={difficulties} />}
-      {showQuestion && <GameQuestion makeAnswer={handleAnswer} index={index} question={currQuestion} />}
-      {showEndGame && <EndGameComponent endGame={endGame!} difficulties={difficulties} category={category} />}
+      { !loading ? <>
+        {!inGame && <CategorySelection makeSelection={handleSelection} difficulties={difficulties} />}
+        {showQuestion && <GameQuestion makeAnswer={handleAnswer} index={index} question={currQuestion} />}
+        {showEndGame && <EndGameComponent endGame={endGame!} difficulties={difficulties} category={category} />}
+      </> : <LoadingCircle /> }
     </div>
   );
 }

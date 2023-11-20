@@ -1,0 +1,25 @@
+.player {
+    position: fixed;
+    top: 0%;
+    left: 10%;
+    background-color: thistle;
+    margin: 0;
+    padding: 0;
+    z-index: 1000;
+    border-radius: 50%;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
+    transition: .2s ease-in-out;
+}
+.player:hover {
+    transform: translateY(2px);
+    background-color: rgb(209, 188, 209);
+}
+.note {
+    font-size: 4rem;
+    margin: 0;
+    padding: 0;
+}
+.player-menu {
+    max-height: 400px;
+    overflow-y: scroll;
+}

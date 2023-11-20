@@ -1,4 +1,17 @@
+@font-face {
+    font-family: One Piece;
+    src: url("/fonts/one\ piece\ font.ttf");
+}
+.one-piece {
+    font-family: One Piece;
+    font-weight: bold;
+    font-size: 7.0rem;
+    margin: 0;
+    padding: 0;
+    color: #5584AC;
+}
 body {
     background-color: #EEE;
     font-family: 'Quattrocento Sans', sans-serif;
+    position: relative;
 }

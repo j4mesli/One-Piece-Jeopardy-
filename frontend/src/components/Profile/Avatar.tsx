@@ -11,7 +11,7 @@ function Avatar(props: AvatarProps) {
 
   return (
     <div className="avatar">
-      <img className="userAvatar" src={ imagePath }></img>
+      <img className="userAvatar" src={ imagePath } loading="lazy"></img>
       <button type="button" title="Change Avatar" onClick={ () => props.changeAvatar(true) }>Change Avatar</button>
     </div>
   );
