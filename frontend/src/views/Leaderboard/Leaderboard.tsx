@@ -92,7 +92,7 @@ function Leaderboard() {
 
   return (
     <div className="leaderboard">
-      <h2>Global Leaderboard</h2>
+      <h2>Global Leaderboard (Top 20)</h2>
       { 
         leaderboard.length === 0 ?
         <LoadingCircle /> :

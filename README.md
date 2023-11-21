@@ -1,5 +1,3 @@
-The content below is an example project proposal / requirements document. Replace the text below the lines marked "__TODO__" with details specific to your project. Remove the "TODO" lines.
-
 # One Piece Jeopardy! 
 
 ## Overview
@@ -11,7 +9,7 @@ The content below is an example project proposal / requirements document. Replac
 
 A user would have to pick one of the three categories and answer three questions (randomly selected from stored .json files on backend). Then, a user answers each question to their best of ability (One try per question. If you miss it, that's tragic!). After the user completes the game, they have the option to save it to their profile, which they can access anytime to view past games.
 
-By the nature of this game randomly selecting things, functionality will need to be implemented to randomly select three questions from each .json. I'm thinking to implement a cron job at [pythonanywhere](https://www.pythonanywhere.com) and run a Python script to use the GitHub API to grab my GitHub credentials and select three questions to use once a day at 12:00 AM UCT. 
+By the nature of this game randomly selecting things, functionality will need to be implemented to randomly select three questions from each .json. I implemented a cron job at [pythonanywhere](https://www.pythonanywhere.com) to run a Python script to use the GitHub API to grab my GitHub credentials and select three questions to use once a day at 12:00 AM UCT. 
 
 ## Data Model
 
@@ -30,6 +28,8 @@ An Example User:
   salt: "pootisspencerhere" // what the password hash is salted with, randomly generated per user
   pastGames: // an array of references to past games
   sessionId: // a string or null (null added on successful logout, string added as a randomly generated string on successful login)
+  lastPlayed: // a date string that holds the date of the most recent game the user has played (null if hasn't played a game yet)
+  points: // a number, total amount of points User has accrued
 }
 ```
 
@@ -90,8 +90,8 @@ An Example of a Past Game:
 
 1. as non-registered user, I can register a new account with the site
 2. as a user, I can log in to the site
-3. as a user, I can view my past games (if any)
 4. as a user, I can play the game
+3. as a user, I can view the Global Leaderboard (top 20 players by points)
 
 ## Research Topics
 
@@ -100,14 +100,14 @@ An Example of a Past Game:
     * see <code>[here](frontend/src/views/Register/Register.tsx)</code> for register page
     * see <code>[here](frontend/src/views/Login/Login.tsx)</code> for login page
 * (1 point) Perform client side form validation w/ custom code
-    * see <code>[here](frontend/src/views/Register/Register.tsx)</code> and <code>[here](frontend/src/views/Login/Login.tsx)</code>
+    * see <code>[here](frontend/src/views/Register/Register.tsx)</code>, <code>[here](frontend/src/views/Login/Login.tsx)</code>, <code>[here](frontend/src/components/Profile/ChangeUsername.tsx)</code>, and <code>[here](frontend/src/components/Profile/ChangeAvatar.tsx)</code>
     * if you try and submit an empty form, it will not let you.
 * (1 point) External Library: TypeScript
     * I will use TypeScript.
 * (1 point) External Library: React Table
     * I'll use React Table for table formatting (Leaderboard)
 * (1 points) Unit Testing
-    * I will use Jest for my unit tests.
+    * I will use Jest for my unit tests. Here's the <code>[screencap](documentation/test-suite.png)</code>
 * (3 points (1+1+1)) Vite + React + ESLint
     * I will use Vite + React + ESLint for my frontend. I have experience, so I won't have to learn anything. Because of the overhead added, I'll assign it three (1 + 1 + 1) points.
 
