@@ -18,9 +18,9 @@ export const formatDate = (dateString: string) => {
     return dateString;
   }
   
-  const dayOfWeek = days[date.getDay()];
+  const dayOfWeek = days[date.getDay()+1 === 7 ? 0 : date.getDay()+1];
   const month = months[date.getMonth()];
-  const dayOfMonth = date.getDate();
+  const dayOfMonth = date.getDate()+1;
   const year = date.getFullYear();
 
   return `${dayOfWeek}, ${month} ${dayOfMonth}${getOrdinalIndicator(dayOfMonth)}, ${year}`;

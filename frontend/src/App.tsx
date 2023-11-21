@@ -91,7 +91,7 @@ function App() {
     <div className="App container">
       <BrowserRouter>
         {hasSession && <Header />}
-        <h1 className="App-title one-piece">ONE P<span style={{ color: 'rgb(175,0,0)' }}>I</span>ECE JEOPARDY!</h1>
+        <h1 className="App-title one-piece">ONE P<span style={{ color: '#D70000' }}>I</span>ECE JEOPARDY!</h1>
         <Routes>
           <Route element={<LoggedOutRoute />}>
             <Route path="/login" element={<Login />} />

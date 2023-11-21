@@ -1,12 +1,11 @@
 .leaderboard {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    margin-top: 50px;
-    margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
-/* Style for the leaderboard table */
 .ldb-table {
   border-collapse: collapse;
   width: 80%;
@@ -16,40 +15,31 @@
   font-size: 1em;
   background-color: #f4f4f4;
   border-radius: 8px;
-  overflow: hidden; /* For border-radius */
-  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 }
-
-/* Style for table headers */
 .ldb-table-header {
   background-color: #2E62A3;
   color: white;
   text-align: center;
   padding: 15px;
   font-weight: bold;
-  cursor: pointer; /* Indicates that the header is clickable */
+  cursor: pointer;
 }
-
-/* Style for table rows and data cells */
 .ldb-table-row:nth-child(even) {
-  background-color: #f2f2f2; /* Zebra striping for rows */
+  background-color: #f2f2f2;
 }
-
 .ldb-table-data {
   padding: 15px;
   text-align: center;
-  border-top: 1px solid #ddd; /* Horizontal line between rows */
+  border-top: 1px solid #ddd;
 }
-
-/* Style for user avatars */
 .ldb-table-data .userAvatar {
-  height: 80px; /* Adjust as needed */
+  height: 80px;
   width: 80px;
-  border-radius: 50%; /* Circular avatars */
-  object-fit: cover; /* Ensures the image covers the area nicely */
+  border-radius: 50%;
+  object-fit: cover;
 }
-
-/* Optional: Hover effect on rows */
 .ldb-table-row:hover {
   background-color: #e8e8e8;
 }
