@@ -110,7 +110,7 @@ const registerHandler = async (req: Request, res: Response) => {
         headers.password = headers.password as string;
 
         const user = await User.findOne({ username: headers.username });
-        if (user !== null) {
+        if (user) {
             return res.status(400).send({
                 message: "User already exists",
                 status: 400,
