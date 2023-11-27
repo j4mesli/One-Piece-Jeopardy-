@@ -16,7 +16,7 @@ function CategorySelection(props: CategorySelectionProps) {
             Answer each question as it appears.<br />
             Your responses will be evaluated after all three questions are answered.<br />
             The difficulty of each category is indicated by the number of stars.<br />
-            The more stars, the harder the category.<br />
+            The more stars there are, the more points you can earn, with greater difficulty!<br />
           </p>
         </div>
         <div className="subcategory">
