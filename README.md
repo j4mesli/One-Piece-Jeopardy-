@@ -102,11 +102,11 @@ An Example of a Past Game:
 * (1 point) Perform client side form validation w/ custom code
     * see <code>[here](frontend/src/views/Register/Register.tsx)</code>, <code>[here](frontend/src/views/Login/Login.tsx)</code>, <code>[here](frontend/src/components/Profile/ChangeUsername.tsx)</code>, and <code>[here](frontend/src/components/Profile/ChangeAvatar.tsx)</code>
     * if you try and submit an empty form, it will not let you.
-* (1 point) External Library: TypeScript
+* (2 points) External Library: TypeScript
     * I will use TypeScript.
 * (1 point) External Library: React Table
     * I'll use React Table for table formatting (Leaderboard)
-* (1 points) Unit Testing
+* (2 points) Unit Testing
     * I will use Jest for my unit tests. Here's the <code>[screencap](documentation/test-suite.png)</code>
 * (3 points (1+1+1)) Vite + React + ESLint
     * I will use Vite + React + ESLint for my frontend. I have experience, so I won't have to learn anything. Because of the overhead added, I'll assign it three (1 + 1 + 1) points.
