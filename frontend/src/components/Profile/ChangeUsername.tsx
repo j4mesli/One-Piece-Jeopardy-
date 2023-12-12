@@ -11,7 +11,7 @@ function ChangeUsername(props: ChangeUsernameProps) {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const endpoint = 'https://one-piece-jeopardy-backend-d2ca7583addf.herokuapp.com/updateUser';
-    const newUsername = e.currentTarget.newUsername.value as string;
+    const newUsername = (e.currentTarget.newUsername.value as string).toLowerCase();
     const session = JSON.parse(sessionStorage.getItem('session')!);
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -28,7 +28,7 @@ function ChangeUsername(props: ChangeUsernameProps) {
     else {
       props.setUser(data.user);
       const session: UserSession = JSON.parse(sessionStorage.getItem('session')!);
-      session.username = data.user.username;
+      session.username = data.user.username.toLowercase();
       sessionStorage.setItem('session', JSON.stringify(session));
       props.changeUsername(false);
     }

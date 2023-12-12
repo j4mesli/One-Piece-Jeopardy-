@@ -9,7 +9,7 @@ const logoutHandler = async (req: Request, res: Response) => {
     const headers = req.headers;
     if (headers.username && headers.sessionid) {
         try {
-            const user = await User.findOne({ username: headers.username as string });
+            const user = await User.findOne({ username: (headers.username as string).toLowerCase() });
             if (user === null) { 
                 return res.status(400).send({ 
                     message : "User not found.",
