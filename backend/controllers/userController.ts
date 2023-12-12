@@ -311,7 +311,7 @@ const updateUser = async (req: Request, res: Response) => {
         const validated = await User.findOne({ sessionId: headers.sessionid as string });
         if (validated) {
             if (headers.newusername || headers.newavatar) {
-                const newUsername = (headers.newusername as string);
+                const newUsername = (headers.newusername as string).toLowerCase();
                 const newAvatar = headers.newavatar as string;
                 if (newUsername) {
                     const existingUser = await User.findOne({ username: newUsername.toLowerCase() });

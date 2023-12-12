@@ -28,7 +28,7 @@ function ChangeUsername(props: ChangeUsernameProps) {
     else {
       props.setUser(data.user);
       const session: UserSession = JSON.parse(sessionStorage.getItem('session')!);
-      session.username = data.user.username.toLowercase();
+      session.username = data.user.username;
       sessionStorage.setItem('session', JSON.stringify(session));
       props.changeUsername(false);
     }
